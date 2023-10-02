@@ -16,6 +16,8 @@ const urlStruct = {
   '/style.css': htmlHandler.getCSS,
   '/bundle.js': htmlHandler.getBundle,
   '/success': jsonHandler.success,
+  '/palettes': jsonHandler.getPalettes,
+  '/palettes?loggedIn=yes': jsonHandler.getPalettes,
   '/badRequest': jsonHandler.badRequest,
   notFound: jsonHandler.notFound,
 };
@@ -24,7 +26,9 @@ const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
 
-  if (urlStruct[parsedUrl.pathname]) {
+  if (urlStruct[parsedUrl.pathname]) 
+  {
+    if(parsedUrl.pathname === '/palettes' || parsedUrl.pathname === '/palettes?loggedIn=yes')
     urlStruct[parsedUrl.pathname](request, response, params);
   } else {
     urlStruct.notFound(request, response, params);

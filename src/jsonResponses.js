@@ -20,10 +20,9 @@ const success = (request, response) => {
   respondJSON(request, response, 200, responseJSON);
 };
 
-const successMeta = (request, response) =>
-{
+const successMeta = (request, response) => {
   respondJSONMeta(request, response, 200);
-}
+};
 
 const badRequest = (request, response, params) => {
   const responseJSON = {
@@ -56,23 +55,26 @@ const notFoundMeta = (request, response) => {
   respondJSONMeta(request, response, 404);
 };
 
-const addPalette = (request, response, body) => 
-{
+const addPalette = (request, response, body) => {
   const responseJSON = {
     message: 'Palette name and colors are required.',
   };
 
-  if (!body.name || !body.colors) 
-  {
+  if (!body.name || !body.colors) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 };
 
-const getPalette = (request, response) => 
-{
+const getPalettes = (request, response, params) => {
+  const responseJSON = {};
+  if (!params[attribute] || params[attribute] !== paramValue) {
 
+  }
 };
+
+const getPalettesMeta = (request, response) => {respondJSONMeta(request, response, 200);};
+
 module.exports = {
   respondJSON,
   respondJSONMeta,
@@ -83,5 +85,5 @@ module.exports = {
   notFound,
   notFoundMeta,
   addPalette,
-  getPalette
+  getPalettes,
 };
