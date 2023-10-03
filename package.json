@@ -1,6 +1,6 @@
 {
-  "name": "simple_http",
-  "version": "0.0.0",
+  "name": "color-palette-generator",
+  "version": "1.0.0",
   "description": "A simple HTTP example using status codes.",
   "main": "./src/server.js",
   "scripts": {
@@ -12,8 +12,8 @@
     "watchBundle": "webpack watch",
     "heroku-postbuild": "webpack --mode production"
   },
-  "author": "Austin Willoughby",
-  "license": "ISC",
+  "author": "Elliot Gong",
+  "license": "",
   "dependencies": {
     "underscore": "^1.13.6",
     "webpack": "^5.88.2",

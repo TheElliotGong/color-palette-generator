@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <title>Color Palette Generator</title>
+
   <link rel="stylesheet" type="text/css" href="/style.css">
   <script src="/bundle.js"></script>
 </head>
@@ -11,13 +12,25 @@
     <form id="nameForm" action="/addUser" method="post">
       <label for="name">Color Palette Name: </label>
       <input id="nameField" type="text" name="name" />
-      <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+      
+      <div id = "palette">
+        <label for="palette">Colors:</label>
+        <div>
+          <label for="color1">Color 1: </label>
+          <input id = "color1" type ="color"/>
+          <label for="color2">Color 2: </label>
+          <input id = "color2" type ="color"/>
+        </div>
+        
+        <button>Add another color</button>
+      </div>
+      
+      
       <input type="submit" value="Add User" />
     </form>
     <form id="userForm" action="/getPalettes" method="get">
       <select id='urlField'>
-        <option value='/getPalettes'>/getUsers</option>
+        <option value='/getPalettes'>/getPalettes</option>
       </select>
       <select id="methodSelect">
         <option value="get">GET</option>
