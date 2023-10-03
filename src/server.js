@@ -29,7 +29,14 @@ const onRequest = (request, response) => {
   if (urlStruct[parsedUrl.pathname]) 
   {
     if(parsedUrl.pathname === '/palettes' || parsedUrl.pathname === '/palettes?loggedIn=yes')
-    urlStruct[parsedUrl.pathname](request, response, params);
+    {
+      urlStruct[parsedUrl.pathname](request, response, params);
+    }
+    else
+    {
+      urlStruct[parsedUrl.pathname](request, response);
+    }
+    
   } else {
     urlStruct.notFound(request, response, params);
   }

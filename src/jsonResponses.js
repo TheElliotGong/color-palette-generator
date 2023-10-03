@@ -73,7 +73,7 @@ const getPalettes = (request, response, params) => {
   }
 };
 
-const getPalettesMeta = (request, response) => {respondJSONMeta(request, response, 200);};
+
 
 module.exports = {
   respondJSON,
