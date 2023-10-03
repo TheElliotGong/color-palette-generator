@@ -19,3 +19,32 @@ html, body {
   font-size: 2em;
   text-align: center;
 }
+#palette
+{
+  width: fit-content;
+  margin: 0 auto;
+}
+input[type="color"]
+{
+  width: 100px;
+  height:100px
+}
+.color
+{
+  display: flex;
+  width: fit-content;
+  flex-direction: column;
+  gap: 8px;
+}
+#colors
+{
+  display: flex;
+  height: fit-content;
+  gap: 20px;
+  flex-direction: row;
+}
+#addColor
+{
+  height: 40%;
+  margin: auto 0
+}

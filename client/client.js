@@ -48,34 +48,32 @@ const sendFetch = async (url) => {
     const response = await fetch(url);
     handleResponse(response);
 };
+const addPalette = async () => {
+  const paletteForm = document.querySelector("#paletteForm");
+
+  const action = paletteForm.getAttribute("action");
+  const method = paletteForm.getAttribute("method");
+  const response = await fetch()
+  handleResponse(response);
+
+};
+
+const addColor = () => {
+
+};
+
+const removeColor = (event) => {
+  let color = event.target;
+};
 
 const init = () => {
-    const successButton = document.querySelector("#success");
-    const badRequestButton = document.querySelector("#badRequest");
-    const notFoundButton = document.querySelector("#notFound");
+    const paletteGenerator = document.querySelector("#paletteForm");
 
-    const success = () => sendFetch('/success');
-    const badRequest = () => sendFetch('/badRequest');
-    const notFound = () => sendFetch('/somethingUnhandled');
-
-    successButton.addEventListener('click', success);
-    badRequestButton.addEventListener('click', badRequest);
-    notFoundButton.addEventListener('click', notFound);
-    test.print();
-
-    /* Similar to pulling in our other code files, we can also make use of entire
-       npm packages in our code, thanks to webpack. For example, here we are making
-       use of the 'underscore' library's chunk function to break up an array. Usually
-       we could not use an npm package in our client code, but webpack adds the code
-       from underscore to our bundle.js file as well.
-
-       It's worth noting that we don't want to just frivolously include a ton of npm
-       packages in our client code (or our server code for that matter), but webpack
-       gives us the flexibility to do so if we need to.
-    */
-    const arr = [1, 2, 3, 4, 5];
-    const chunked = _.chunk(arr, 3);
-    console.log(chunked);
+    paletteGenerator.addEventListener("submit", (e) => {
+      e.preventDefault();
+      addPalette();
+    });
+    
 };
 
 

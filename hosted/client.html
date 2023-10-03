@@ -9,23 +9,26 @@
 <body>
   <section id="top">
     <h3>Custom Color Palette Generator by Elliot Gong</h3>
-    <form id="nameForm" action="/addUser" method="post">
+    <form id="paletteForm" action="/addPalette" method="post">
       <label for="name">Color Palette Name: </label>
       <input id="nameField" type="text" name="name" />
       
       <div id = "palette">
         <label for="palette">Colors:</label>
-        <div>
-          <label for="color1">Color 1: </label>
-          <input id = "color1" type ="color"/>
-          <label for="color2">Color 2: </label>
-          <input id = "color2" type ="color"/>
+        <div id = "colors">
+          <div class = "color">
+            <input id = "color1" type ="color"/> 
+            <label for="color1">Color 1: </label>
+            <button class = "removeColor">Remove Color</button>
+          </div>
+          <div class = "color">
+            <input id = "color2" type ="color"/>
+            <label for="color2">Color 2: </label>
+            <button class = "removeColor">Remove Color</button>
+          </div>
+          <button id = "addColor">Add another color</button>
         </div>
-        
-        <button>Add another color</button>
       </div>
-      
-      
       <input type="submit" value="Add User" />
     </form>
     <form id="userForm" action="/getPalettes" method="get">
