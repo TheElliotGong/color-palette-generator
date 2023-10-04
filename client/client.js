@@ -45,18 +45,40 @@ const handleResponse = async (response) => {
 };
 
 const sendFetch = async (url) => {
-    const response = await fetch(url);
+    const method = document.querySelector("#methodSelect").value;
+    const action = document.querySelector("#urlField").value;
+
+    const response = await fetch(action, {
+      method,
+      headers:  {
+        'Accept': 'application/json'}
+      });
     handleResponse(response);
 };
+
+
 const addPalette = async () => {
   const paletteForm = document.querySelector("#paletteForm");
 
   const action = paletteForm.getAttribute("action");
   const method = paletteForm.getAttribute("method");
-  const response = await fetch()
+  //Get palette name and colors from html forms.
+  const name = document.querySelector("#nameField").value;
+  const colors = document.querySelectorAll("input[type='color']").map(color => color.value);
+  const formData = `name=${name}&colors=${colors}`;
+
+  let response = await fetch(action, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+    },
+    body: formData,
+  });
   handleResponse(response);
 
 };
+
 
 const addColor = () => {
 
