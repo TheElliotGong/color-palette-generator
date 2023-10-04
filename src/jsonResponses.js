@@ -59,7 +59,7 @@ const addPalette = (request, response, body) => {
   const responseJSON = {
     message: 'Palette name and colors are required.',
   };
-
+  //Check if name and colors are valid.
   if (!body.name || !body.colors) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);

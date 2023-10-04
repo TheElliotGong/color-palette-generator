@@ -59,15 +59,28 @@ const sendFetch = async (url) => {
 
 const addPalette = async () => {
   const paletteForm = document.querySelector("#paletteForm");
-
   const action = paletteForm.getAttribute("action");
   const method = paletteForm.getAttribute("method");
   //Get palette name and colors from html forms.
   const name = document.querySelector("#nameField").value;
-  const colors = document.querySelectorAll("input[type='color']").map(color => color.value);
-  const formData = `name=${name}&colors=${colors}`;
-
-  let response = await fetch(action, {
+  const colors = Array.from(document.querySelectorAll("input[type='color']")).map(color => color.value);
+  let colorData = "";
+  for(let i = 0; i < colors.length; i++)
+  {
+    if(i != colors.length - 1)
+    {
+      colorData += `colors[${i}]=${colors[i]}&`;
+    }
+    else
+    {
+      colorData += `colors[${i}]=${colors[i]}`;
+    }
+    
+  }
+  console.log(colorData);
+  const formData = `name=${name}&colors=${colorData}`;
+  console.log(formData);
+  let response = await fetch('/addPalette', {
     method: method,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -87,7 +100,6 @@ const addColor = () => {
 const removeColor = (event) => {
   let color = event.target;
 };
-
 const init = () => {
     const paletteGenerator = document.querySelector("#paletteForm");
 
@@ -95,9 +107,21 @@ const init = () => {
       e.preventDefault();
       addPalette();
     });
+
+    const colors = document.querySelectorAll("input[type='color']");
+    console.log(colors);
+
+    colors.forEach(color => {
+      color.addEventListener("input", (e) => {
+        document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
+        // e.target.label.innerHTML = `Hex: ${e.target.value}`;
+      });
+      color.addEventListener("change", (e) => {
+        document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
+        // e.target.label.innerHTML = `Hex: ${e.target.value}`;
+      });
+    });
     
 };
-
-
 
 window.onload = init;
