@@ -64,13 +64,31 @@ const addPalette = (request, response, body) => {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
+  let responseCode = 204;
+
+  if (!palettes[body.name]) {
+    responseCode = 201;
+    palettes[body.name] = {};
+  }
+  palettes[body.name].name = body.name;
+  palettes[body.name].colors = body.colors;
+  if(responseCode === 201){
+    responseJSON.message = 'Created Successfully';
+    return respondJSON(request, response, responseCode, responseJSON);
+  }
+  return respondJSONMeta(request, response, responseCode);
+
 };
 
 const getPalettes = (request, response, params) => {
-  const responseJSON = {};
+  let responseJSON = {};
   if (!params[attribute] || params[attribute] !== paramValue) {
-
+    responseJSON.message = 'Unauthorized';
+    responseJSON.id = 'unauthorized';
+    return respondJSON(request, response, 401, responseJSON);
   }
+  responseJSON = {palettes};
+  return respondJSON(request, response, 200, responseJSON);
 };
 
 
