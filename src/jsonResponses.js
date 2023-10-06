@@ -14,7 +14,7 @@ const respondJSONMeta = (request, response, status) => {
 };
 
 
-const badRequest = (request, response, params) => {
+const badRequest = (request, response) => {
   const responseJSON = {
     message: 'Palette name and colors are required.',
     id: 'missingParams'
