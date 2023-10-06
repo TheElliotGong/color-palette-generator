@@ -59,7 +59,7 @@ const addPalette = (request, response, body) => {
   const responseJSON = {
     message: 'Palette name and colors are required.',
   };
-  //Check if name and colors are valid.
+  // Check if name and colors are valid.
   if (!body.name || !body.colors) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
@@ -75,12 +75,11 @@ const addPalette = (request, response, body) => {
   const parsedColors = body.colors.split(',');
 
   palettes[body.name].colors = parsedColors;
-  if(responseCode === 201){
+  if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';
     return respondJSON(request, response, responseCode, responseJSON);
   }
   return respondJSONMeta(request, response, responseCode);
-
 };
 
 const getPalettes = (request, response, params, attribute, paramValue) => {
@@ -90,11 +89,9 @@ const getPalettes = (request, response, params, attribute, paramValue) => {
     responseJSON.id = 'unauthorized';
     return respondJSON(request, response, 401, responseJSON);
   }
-  responseJSON = {palettes};
+  responseJSON = { palettes };
   return respondJSON(request, response, 200, responseJSON);
 };
-
-
 
 module.exports = {
   respondJSON,

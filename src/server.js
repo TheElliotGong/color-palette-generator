@@ -8,7 +8,6 @@ const url = require('url');
 const query = require('querystring');
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
-const { parse } = require('path');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -33,13 +32,12 @@ const parseBody = (request, response, callback) => {
   });
 
   request.on('data', (chunk) => {
-
     body.push(chunk);
   });
   request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
-    
+
     // Once we have the bodyParams object, we will call the handler function. We then
     // proceed much like we would with a GET request.
     callback(request, response, bodyParams);
@@ -49,21 +47,14 @@ const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
 
-  if (urlStruct[parsedUrl.pathname]) 
-  {
-    if(parsedUrl.pathname === '/getPalettes' || parsedUrl.pathname === '/getPalettes?loggedIn=yes')
-    {
-      urlStruct[parsedUrl.pathname](request, response, params, 'loggedIn','yes');
-    }
-    else if(parsedUrl.pathname === '/addPalette')
-    {
+  if (urlStruct[parsedUrl.pathname]) {
+    if (parsedUrl.pathname === '/getPalettes' || parsedUrl.pathname === '/getPalettes?loggedIn=yes') {
+      urlStruct[parsedUrl.pathname](request, response, params, 'loggedIn', 'yes');
+    } else if (parsedUrl.pathname === '/addPalette') {
       parseBody(request, response, urlStruct[parsedUrl.pathname]);
-    }
-    else
-    {
+    } else {
       urlStruct[parsedUrl.pathname](request, response);
     }
-    
   } else {
     urlStruct.notFound(request, response, params);
   }
