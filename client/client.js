@@ -63,21 +63,22 @@ const addPalette = async () => {
   const method = paletteForm.getAttribute("method");
   //Get palette name and colors from html forms.
   const name = document.querySelector("#nameField").value;
-  const colors = Array.from(document.querySelectorAll("input[type='color']")).map(color => color.value);
-  let colorData = "";
+  let colorString = "";
+  const colors = document.querySelectorAll("input[type='color']");
+  console.log(colors);
   for(let i = 0; i < colors.length; i++)
   {
-    if(i != colors.length - 1)
+    if(i === colors.length - 1)
     {
-      colorData += `colors[${i}]=${colors[i]}&`;
+      colorString += colors[i].value;
     }
     else
     {
-      colorData += `colors[${i}]=${colors[i]}`;
+      colorString += colors[i].value + ",";
     }
-    
   }
-  const formData = `name=${name}&colors=${colorData}`;
+  console.log(colorString);
+  const formData = `name=${name}&colors=${colorString}`;
   let response = await fetch('/addPalette', {
     method: method,
     headers: {
@@ -107,7 +108,7 @@ const init = () => {
     });
 
     const colors = document.querySelectorAll("input[type='color']");
-    console.log(colors);
+
 
     colors.forEach(color => {
       color.addEventListener("input", (e) => {

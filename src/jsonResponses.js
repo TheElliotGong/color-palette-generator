@@ -71,7 +71,10 @@ const addPalette = (request, response, body) => {
     palettes[body.name] = {};
   }
   palettes[body.name].name = body.name;
-  palettes[body.name].colors = body.colors;
+
+  const parsedColors = body.colors.split(',');
+
+  palettes[body.name].colors = parsedColors;
   if(responseCode === 201){
     responseJSON.message = 'Created Successfully';
     return respondJSON(request, response, responseCode, responseJSON);

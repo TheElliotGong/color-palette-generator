@@ -33,13 +33,13 @@ const parseBody = (request, response, callback) => {
   });
 
   request.on('data', (chunk) => {
-    
+
     body.push(chunk);
   });
   request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
-    console.log(bodyParams);
+    
     // Once we have the bodyParams object, we will call the handler function. We then
     // proceed much like we would with a GET request.
     callback(request, response, bodyParams);
