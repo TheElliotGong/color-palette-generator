@@ -31,14 +31,15 @@
             <label for="color3" value=>Hex: #000000</label>
             <button class = "removeColor">Remove Color</button>
           </div>
-          <button id = "addColor">Add another color</button>
+          
         </div>
       </div>
+      <button id = "addColor">Add another color</button>
       <input type="submit" value="Add Palette" />
     </form>
-    <form id="userForm" action="/getPalettes" method="get">
+    <form id="userForm" action="/getPalettes?loggedIn=yes" method="get">
       <select id='urlField'>
-        <option value='/getPalettes'>/getPalettes</option>
+        <option value='/getPalettes?loggedIn=yes'>/getPalettes</option>
       </select>
       <select id="methodSelect">
         <option value="get">GET</option>
