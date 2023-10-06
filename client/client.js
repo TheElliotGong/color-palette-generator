@@ -77,9 +77,7 @@ const addPalette = async () => {
     }
     
   }
-  console.log(colorData);
   const formData = `name=${name}&colors=${colorData}`;
-  console.log(formData);
   let response = await fetch('/addPalette', {
     method: method,
     headers: {

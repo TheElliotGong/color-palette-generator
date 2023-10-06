@@ -33,12 +33,13 @@ const parseBody = (request, response, callback) => {
   });
 
   request.on('data', (chunk) => {
+    
     body.push(chunk);
   });
   request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
-
+    console.log(bodyParams);
     // Once we have the bodyParams object, we will call the handler function. We then
     // proceed much like we would with a GET request.
     callback(request, response, bodyParams);
@@ -52,7 +53,7 @@ const onRequest = (request, response) => {
   {
     if(parsedUrl.pathname === '/getPalettes' || parsedUrl.pathname === '/getPalettes?loggedIn=yes')
     {
-      urlStruct[parsedUrl.pathname](request, response, params);
+      urlStruct[parsedUrl.pathname](request, response, params, 'loggedIn','yes');
     }
     else if(parsedUrl.pathname === '/addPalette')
     {

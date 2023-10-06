@@ -80,7 +80,7 @@ const addPalette = (request, response, body) => {
 
 };
 
-const getPalettes = (request, response, params) => {
+const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
   if (!params[attribute] || params[attribute] !== paramValue) {
     responseJSON.message = 'Unauthorized';
