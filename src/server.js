@@ -15,16 +15,14 @@ const urlStruct = {
   '/': htmlHandler.getIndex,
   '/style.css': htmlHandler.getCSS,
   '/bundle.js': htmlHandler.getBundle,
-  '/success': jsonHandler.success,
   '/addPalette': jsonHandler.addPalette,
   '/getPalettes': jsonHandler.getPalettes,
   '/getPalettes?loggedIn=yes': jsonHandler.getPalettes,
-  '/badRequest': jsonHandler.badRequest,
   notFound: jsonHandler.notFound,
 };
 const parseBody = (request, response, callback) => {
   const body = [];
-
+  //Bad request
   request.on('error', (err) => {
     console.dir(err);
     response.statusCode = 400;

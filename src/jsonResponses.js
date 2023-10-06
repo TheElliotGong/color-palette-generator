@@ -12,30 +12,14 @@ const respondJSONMeta = (request, response, status) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   response.end();
 };
-const success = (request, response) => {
-  const responseJSON = {
-    message: 'This is a successful response!',
-  };
 
-  respondJSON(request, response, 200, responseJSON);
-};
-
-const successMeta = (request, response) => {
-  respondJSONMeta(request, response, 200);
-};
 
 const badRequest = (request, response, params) => {
   const responseJSON = {
-    message: 'This request has the required parameters',
+    message: 'Palette name and colors are required.',
+    id: 'missingParams'
   };
-
-  if (!params.valid || params.valid !== 'true') {
-    responseJSON.message = 'Missing valid query parameter set to true';
-    responseJSON.id = 'badRequest';
-    return respondJSON(request, response, 400, responseJSON);
-  }
-
-  return respondJSON(request, response, 200, responseJSON);
+  return respondJSON(request, response, 400, responseJSON);
 };
 
 const badRequestMeta = (request, response) => {
@@ -71,10 +55,7 @@ const addPalette = (request, response, body) => {
     palettes[body.name] = {};
   }
   palettes[body.name].name = body.name;
-
-  const parsedColors = body.colors.split(',');
-
-  palettes[body.name].colors = parsedColors;
+  palettes[body.name].colors = body.colors.split(',');
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';
     return respondJSON(request, response, responseCode, responseJSON);
@@ -84,11 +65,13 @@ const addPalette = (request, response, body) => {
 
 const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
+  //Check if query parameters are valid.
   if (!params[attribute] || params[attribute] !== paramValue) {
     responseJSON.message = 'Unauthorized';
     responseJSON.id = 'unauthorized';
     return respondJSON(request, response, 401, responseJSON);
   }
+  //If query parameters are valid, return all palettes.
   responseJSON = { palettes };
   return respondJSON(request, response, 200, responseJSON);
 };
@@ -96,8 +79,6 @@ const getPalettes = (request, response, params, attribute, paramValue) => {
 module.exports = {
   respondJSON,
   respondJSONMeta,
-  success,
-  successMeta,
   badRequest,
   badRequestMeta,
   notFound,

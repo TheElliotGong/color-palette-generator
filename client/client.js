@@ -40,8 +40,14 @@ const handleResponse = async (response) => {
         break;
     }
 
-    const resObj = await response.json();
-    content.innerHTML += `<p>${resObj.message}</p>`;
+    const obj = await response.json();
+    if(obj.message){
+      content.innerHTML += `<p>${resObj.message}</p>`;
+    }
+    if(obj.palettes)
+    {
+      
+    }
 };
 
 const sendFetch = async (url) => {
