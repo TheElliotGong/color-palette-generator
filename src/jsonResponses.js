@@ -13,25 +13,11 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
-
-const badRequest = (request, response) => {
-  const responseJSON = {
-    message: 'Palette name and colors are required.',
-    id: 'missingParams'
-  };
-  return respondJSON(request, response, 400, responseJSON);
-};
-
-const badRequestMeta = (request, response) => {
-  respondJSONMeta(request, response, 400);
-};
-
 const notFound = (request, response) => {
   const responseJSON = {
     message: 'The page you are looking for was not found.',
     id: 'notFound',
   };
-
   respondJSON(request, response, 404, responseJSON);
 };
 
@@ -43,7 +29,7 @@ const addPalette = (request, response, body) => {
   const responseJSON = {
     message: 'Palette name and colors are required.',
   };
-  // Check if name and colors are valid.
+  // Return bad request error if parameters not specified.
   if (!body.name || !body.colors) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
@@ -79,8 +65,6 @@ const getPalettes = (request, response, params, attribute, paramValue) => {
 module.exports = {
   respondJSON,
   respondJSONMeta,
-  badRequest,
-  badRequestMeta,
   notFound,
   notFoundMeta,
   addPalette,

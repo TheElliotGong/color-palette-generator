@@ -54,7 +54,7 @@ const onRequest = (request, response) => {
       urlStruct[parsedUrl.pathname](request, response);
     }
   } else {
-    urlStruct.notFound(request, response, params);
+    urlStruct.notFound(request, response);
   }
 };
 
