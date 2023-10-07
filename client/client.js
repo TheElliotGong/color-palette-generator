@@ -42,7 +42,7 @@ const handleResponse = async (response) => {
 
     const obj = await response.json();
     if(obj.message){
-      content.innerHTML += `<p>${resObj.message}</p>`;
+      content.innerHTML += `<p>${obj.message}</p>`;
     }
     if(obj.palettes)
     {
@@ -53,7 +53,6 @@ const handleResponse = async (response) => {
 const sendFetch = async (url) => {
     const method = document.querySelector("#methodSelect").value;
     const action = document.querySelector("#urlField").value;
-
     const response = await fetch(action, {
       method,
       headers:  {
@@ -96,15 +95,18 @@ const removeColor = (event) => {
 };
 const init = () => {
     const paletteGenerator = document.querySelector("#paletteForm");
+    const userForm = document.querySelector("#userForm");
 
     paletteGenerator.addEventListener("submit", (e) => {
       e.preventDefault();
       addPalette();
     });
 
+    userForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      sendFetch();
+    });
     const colors = document.querySelectorAll("input[type='color']");
-
-
     colors.forEach(color => {
       color.addEventListener("input", (e) => {
         document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;

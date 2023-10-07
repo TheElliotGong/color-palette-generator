@@ -34,30 +34,34 @@ const addPalette = (request, response, body) => {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
+  // By default, we're updating an existing palette.
   let responseCode = 204;
-
+  // Create new palette if it doesn't exist.
   if (!palettes[body.name]) {
     responseCode = 201;
     palettes[body.name] = {};
   }
+  // Update palette data.
   palettes[body.name].name = body.name;
   palettes[body.name].colors = body.colors.split(',');
+  // Return success message.
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';
     return respondJSON(request, response, responseCode, responseJSON);
   }
+  responseJSON.message = 'Updated Successfully';
   return respondJSONMeta(request, response, responseCode);
 };
 
 const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
-  //Check if query parameters are valid.
+  // Check if query parameters are valid.
   if (!params[attribute] || params[attribute] !== paramValue) {
-    responseJSON.message = 'Unauthorized';
+    responseJSON.message = 'You do not have authorization to view this content.';
     responseJSON.id = 'unauthorized';
     return respondJSON(request, response, 401, responseJSON);
   }
-  //If query parameters are valid, return all palettes.
+  // If query parameters are valid, return all palettes.
   responseJSON = { palettes };
   return respondJSON(request, response, 200, responseJSON);
 };

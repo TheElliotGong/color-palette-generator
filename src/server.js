@@ -22,7 +22,7 @@ const urlStruct = {
 };
 const parseBody = (request, response, callback) => {
   const body = [];
-  //Bad request
+  // Bad request
   request.on('error', (err) => {
     console.dir(err);
     response.statusCode = 400;
