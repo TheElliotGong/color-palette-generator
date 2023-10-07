@@ -7,8 +7,7 @@
    a browser-friendly version to send to the client.
 */
 
-const test = require('./other.js');
-const _ = require('underscore');
+
 /* Most of the below code is ripped straight from the "Status Code" demo. The only
    parts unique to this example are at the bottom of the init function. Look there
    for more comments.
@@ -92,6 +91,12 @@ const addColor = () => {
 
 const removeColor = (event) => {
   let color = event.target;
+};
+
+const createPalette = (palette) => {
+  let html = `<div class="palette" id="${palette.name}">`;
+  html += `<h3>${palette.name}</h3>`;
+  html += `<div class="colors">`;
 };
 const init = () => {
     const paletteGenerator = document.querySelector("#paletteForm");
