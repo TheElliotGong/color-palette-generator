@@ -40,18 +40,33 @@ const handleResponse = async (response) => {
     }
 
     const obj = await response.json();
+    console.log(obj);
     if(obj.message){
       content.innerHTML += `<p>${obj.message}</p>`;
     }
     if(obj.palettes)
     {
-      
+      const paletteKeys = Object.keys(obj.palettes);
+      console.log(paletteKeys);
+      if(paletteKeys.length == 0)
+      {
+        content.innerHTML += `<p>No palettes found</p>`;
+      }
+      else
+      {
+        paletteKeys.forEach(key => {
+          console.log(JSON.stringify(obj.palettes[key]));
+          createPalette(obj.palettes[key]);
+        });
+        
+      }
     }
 };
 
 const sendFetch = async (url) => {
     const method = document.querySelector("#methodSelect").value;
     const action = document.querySelector("#urlField").value;
+
     const response = await fetch(action, {
       method,
       headers:  {
@@ -67,10 +82,8 @@ const addPalette = async () => {
   const method = paletteForm.getAttribute("method");
   //Get palette name and colors from html forms.
   const name = document.querySelector("#nameField").value;
-  let colorString = "";
   const colors = Array.from(document.querySelectorAll("input[type='color']")).map(color => color.value).join();
   
-  console.log(colors)
   const formData = `name=${name}&colors=${colors}`;
   let response = await fetch('/addPalette', {
     method: method,
@@ -94,9 +107,29 @@ const removeColor = (event) => {
 };
 
 const createPalette = (palette) => {
-  let html = `<div class="palette" id="${palette.name}">`;
-  html += `<h3>${palette.name}</h3>`;
-  html += `<div class="colors">`;
+  
+  let paletteElement = document.createElement("div");
+  paletteElement.classList.add("palette");
+  paletteElement.id = palette.name;
+  paletteElement.innerHTML += `<h3>${palette.name}</h3>`;
+
+
+  let colors = document.createElement("div");
+  colors.classList.add("colors");
+  palette.colors.forEach(color => {
+
+    let colorElement = document.createElement("div");
+    colorElement.id = color;
+    colorElement.classList.add("color");
+    colorElement.innerHTML += `<div class="color" style="background-color: ${color};width:100px;height:100px "></div>`;
+    colorElement.innerHTML += `<h2>${color}</h2>`;
+    colors.appendChild(colorElement);
+  });
+  paletteElement.appendChild(colors);
+
+
+  document.querySelector("#content").appendChild(paletteElement);
+
 };
 const init = () => {
     const paletteGenerator = document.querySelector("#paletteForm");
