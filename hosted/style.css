@@ -15,7 +15,7 @@ html, body {
 }
 
 #content {
-  margin-top: 100px;
+  margin: 100px 10% 0;
   font-size: 2em;
   text-align: center;
 }
@@ -29,6 +29,12 @@ input[type="color"]
   width: 100px;
   height:100px
 }
+.palette, .colors
+{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
 .color
 {
   display: flex;
@@ -36,6 +42,13 @@ input[type="color"]
   flex-direction: column;
   gap: 8px;
 }
+.color p, h3
+{
+  width: fit-content;
+  
+  margin: 5px auto;
+}
+
 #colors
 {
   display: flex;

@@ -121,8 +121,8 @@ const createPalette = (palette) => {
     let colorElement = document.createElement("div");
     colorElement.id = color;
     colorElement.classList.add("color");
-    colorElement.innerHTML += `<div class="color" style="background-color: ${color};width:100px;height:100px "></div>`;
-    colorElement.innerHTML += `<h2>${color}</h2>`;
+    colorElement.innerHTML += `<div class="color" style="background-color: ${color};width:100px;height:100px;border:4px solid  "></div>`;
+    colorElement.innerHTML += `<p>${color}</p>`;
     colors.appendChild(colorElement);
   });
   paletteElement.appendChild(colors);
