@@ -12,6 +12,8 @@
    parts unique to this example are at the bottom of the init function. Look there
    for more comments.
 */
+const tinycolor = require("tinycolor2");
+
 const handleResponse = async (response) => {
     const content = document.getElementById('content');
 
@@ -117,7 +119,8 @@ const createPalette = (palette) => {
   let colors = document.createElement("div");
   colors.classList.add("colors");
   palette.colors.forEach(color => {
-
+    let testColor = tinycolor(color);
+    console.log(testColor);
     let colorElement = document.createElement("div");
     colorElement.id = color;
     colorElement.classList.add("color");
