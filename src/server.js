@@ -44,7 +44,6 @@ const parseBody = (request, response, callback) => {
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
-  console.log(parsedUrl.pathname);
   if (urlStruct[parsedUrl.pathname]) {
     //If the user wants to view all the palettes.
     if (parsedUrl.pathname === '/getPalettes') {
