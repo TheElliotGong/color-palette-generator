@@ -17,7 +17,7 @@ const urlStruct = {
   '/bundle.js': htmlHandler.getBundle,
   '/addPalette': jsonHandler.addPalette,
   '/getPalettes': jsonHandler.getPalettes,
-  '/getPalettes?loggedIn=yes': jsonHandler.getPalettes,
+  '/getPalette': jsonHandler.getPalette,
   notFound: jsonHandler.notFound,
 };
 const parseBody = (request, response, callback) => {
@@ -44,16 +44,28 @@ const parseBody = (request, response, callback) => {
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
-
+  console.log(parsedUrl.pathname);
   if (urlStruct[parsedUrl.pathname]) {
-    if (parsedUrl.pathname === '/getPalettes' || parsedUrl.pathname === '/getPalettes?loggedIn=yes') {
+    //If the user wants to view all the palettes.
+    if (parsedUrl.pathname === '/getPalettes') {
       urlStruct[parsedUrl.pathname](request, response, params, 'loggedIn', 'yes');
     } else if (parsedUrl.pathname === '/addPalette') {
       parseBody(request, response, urlStruct[parsedUrl.pathname]);
-    } else {
+    }
+    //If the user wants to view an individual palette.
+    else if(parsedUrl.pathname === '/getPalette')
+    {
+      urlStruct[parsedUrl.pathname](request, response, params.name);
+    } 
+    else {
       urlStruct[parsedUrl.pathname](request, response);
     }
-  } else {
+  }
+  else if(params['name'])
+  {
+   
+  }
+   else {
     urlStruct.notFound(request, response);
   }
 };

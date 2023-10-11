@@ -52,7 +52,25 @@ const addPalette = (request, response, body) => {
   responseJSON.message = 'Updated Successfully';
   return respondJSONMeta(request, response, responseCode);
 };
+const getPalette = (request, response, name) => {
 
+  const responseJSON = {
+    message: 'Palette name is required.',
+  };
+  // Return bad request error if parameters not specified.
+  if (!name) {
+    responseJSON.id = 'missingParams';
+    return respondJSON(request, response, 400, responseJSON);
+  }
+  // Return success message.
+  if (palettes[name]) {
+    responseJSON.message = 'Palette found';
+    responseJSON.palette = palettes[name];
+    return respondJSON(request, response, 200, responseJSON);
+  }
+  responseJSON.message = 'Palette not found';
+  return respondJSONMeta(request, response, 404);
+};
 const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
   // Check if query parameters are valid.
@@ -73,4 +91,5 @@ module.exports = {
   notFoundMeta,
   addPalette,
   getPalettes,
+  getPalette
 };

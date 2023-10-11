@@ -101,13 +101,16 @@ const addPalette = async () => {
 
 
 const addColor = () => {
-
+  let colors = document.querySelectorAll(".color")
+  let newColor = document.createElement("div");
+  newColor.classList.add("color");
+  newColor.innerHTML += `<input type="color" name="colors" value="#000000">`;
 };
 
 const removeColor = (event) => {
   const colors = document.querySelector("#colors");
   let color = event.target.parentElement;
-  console.log(color);
+  colors.removeChild(color);
 };
 
 const createPalette = (palette) => {
@@ -127,12 +130,9 @@ const createPalette = (palette) => {
     let b = testColor._b;
     let contrastColor;
     if ((r*0.299 + g*0.587 + b*0.114) > 150) 
-    {
-      contrastColor = "black";
-    }
+    {contrastColor = "black";}
     else
-    {
-      contrastColor = "white";
+    { contrastColor = "white";
     }
     let colorElement = document.createElement("div");
     colorElement.id = color;
@@ -150,16 +150,16 @@ const init = () => {
     const paletteGenerator = document.querySelector("#paletteForm");
     const userForm = document.querySelector("#userForm");
 
-    // const addPaletteButton = document.querySelector("#addPalette");
-    // addPaletteButton.addEventListener("click", (e) => {e.preventDefault(); addPalette();});
+    const addPaletteButton = document.querySelector("#addPalette");
+    addPaletteButton.addEventListener("click", (e) => {e.preventDefault(); addPalette();});
 
     const removeColorButtons = document.querySelectorAll(".removeColor");
     removeColorButtons.forEach(button => {button.addEventListener("click", (e) => {removeColor(e)});});
 
-    paletteGenerator.addEventListener("submit", (e) => {
-      e.preventDefault();
-      addPalette();
-    });
+    // paletteGenerator.addEventListener("submit", (e) => {
+    //   e.preventDefault();
+    //   addPalette();
+    // });
 
     userForm.addEventListener("submit", (e) => {
       e.preventDefault();
