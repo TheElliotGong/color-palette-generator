@@ -3,7 +3,7 @@ html, body {
     width: 100%;
     margin: 0;
     padding: 0;
-    background-color: gray;
+    background-color: rgb(181, 181, 181);
 }
 
 #top {
@@ -19,6 +19,9 @@ html, body {
   margin: 100px 10% 0;
   font-size: 2em;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 #palette
 {
@@ -42,12 +45,13 @@ input[type="color"]
   width: fit-content;
   flex-direction: column;
   gap: 8px;
+  font-size: large;
 }
 .color p, h3
 {
   width: fit-content;
   
-  margin: 5px auto;
+  margin: auto;
 }
 
 #colors

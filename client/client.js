@@ -13,6 +13,10 @@
    for more comments.
 */
 const tinycolor = require("tinycolor2");
+const generateUniqueId = require('generate-unique-id');
+const minColors = 3;
+const maxColors = 6;
+
 
 const handleResponse = async (response) => {
     const content = document.getElementById('content');
@@ -101,10 +105,37 @@ const addPalette = async () => {
 
 
 const addColor = () => {
-  let colors = document.querySelectorAll(".color")
+
   let newColor = document.createElement("div");
+  let colorID = generateUniqueId({length: 6});
+
   newColor.classList.add("color");
-  newColor.innerHTML += `<input type="color" name="colors" value="#000000">`;
+  let colorInput = document.createElement("input");
+  colorInput.id = colorID;
+  colorInput.type = "color";
+  let colorLabel = document.createElement("label");
+  colorLabel.for = colorID;
+  colorLabel.innerHTML = `Hex: #000000`;
+  let removeColorButton = document.createElement("button");
+  removeColorButton.classList.add("removeColor");
+  removeColorButton.innerHTML = "Remove Color";
+  newColor.appendChild(colorInput);
+  newColor.appendChild(colorLabel);
+  newColor.appendChild(removeColorButton);
+
+  document.querySelector("#colors").appendChild(newColor);
+  
+
+  colorInput.addEventListener("input", (e) => {
+    document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
+    // e.target.label.innerHTML = `Hex: ${e.target.value}`;
+  });
+  colorInput.addEventListener("change", (e) => {
+    document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
+    // e.target.label.innerHTML = `Hex: ${e.target.value}`;
+  });
+
+  removeColorButton.addEventListener("click", (e) => {removeColor(e);});
 };
 
 const removeColor = (event) => {
@@ -137,7 +168,8 @@ const createPalette = (palette) => {
     let colorElement = document.createElement("div");
     colorElement.id = color;
     colorElement.classList.add("color");
-    colorElement.innerHTML += `<div class="color" style="background-color: ${color};width:100px;height:100px;border:4px solid ${contrastColor}"><p style="color:${contrastColor}">${color}</p></div>`;
+    colorElement.innerHTML += `<div class="color" style="background-color: ${color};color:${contrastColor};width:100px;height:100px;border:4px solid ${contrastColor}">
+    <p>${color}</p></div>`;
     colors.appendChild(colorElement);
   });
   paletteElement.appendChild(colors);
@@ -156,10 +188,8 @@ const init = () => {
     const removeColorButtons = document.querySelectorAll(".removeColor");
     removeColorButtons.forEach(button => {button.addEventListener("click", (e) => {removeColor(e)});});
 
-    // paletteGenerator.addEventListener("submit", (e) => {
-    //   e.preventDefault();
-    //   addPalette();
-    // });
+    const addColorButton = document.querySelector("#addColor");
+    addColorButton.addEventListener("click", (e) => {e.preventDefault(); addColor();});
 
     userForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -176,6 +206,8 @@ const init = () => {
         // e.target.label.innerHTML = `Hex: ${e.target.value}`;
       });
     });
+
+
     
 };
 
