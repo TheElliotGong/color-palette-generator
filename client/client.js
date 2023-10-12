@@ -14,7 +14,7 @@
 */
 const tinycolor = require("tinycolor2");
 const generateUniqueId = require('generate-unique-id');
-const minColors = 3;
+const minColors = 2;
 const maxColors = 6;
 
 
@@ -105,45 +105,62 @@ const addPalette = async () => {
 
 
 const addColor = () => {
+  if(document.querySelectorAll(".color").length < maxColors)
+  {
+    //Create new color input and label.
+    let newColor = document.createElement("div");
+    let colorID = generateUniqueId({length: 6});
 
-  let newColor = document.createElement("div");
-  let colorID = generateUniqueId({length: 6});
+    newColor.classList.add("color");
+    let colorInput = document.createElement("input");
+    colorInput.id = colorID;
+    colorInput.type = "color";
+    let colorLabel = document.createElement("label");
+    colorLabel.for = colorID;
+    colorLabel.innerHTML = `Hex: #000000`;
+    let removeColorButton = document.createElement("button");
+    removeColorButton.classList.add("removeColor");
+    removeColorButton.innerHTML = "Remove Color";
+    newColor.appendChild(colorInput);
+    newColor.appendChild(colorLabel);
+    newColor.appendChild(removeColorButton);
 
-  newColor.classList.add("color");
-  let colorInput = document.createElement("input");
-  colorInput.id = colorID;
-  colorInput.type = "color";
-  let colorLabel = document.createElement("label");
-  colorLabel.for = colorID;
-  colorLabel.innerHTML = `Hex: #000000`;
-  let removeColorButton = document.createElement("button");
-  removeColorButton.classList.add("removeColor");
-  removeColorButton.innerHTML = "Remove Color";
-  newColor.appendChild(colorInput);
-  newColor.appendChild(colorLabel);
-  newColor.appendChild(removeColorButton);
-
-  document.querySelector("#colors").appendChild(newColor);
+    document.querySelector("#colors").appendChild(newColor);
   
+    //Add event listeners to new color input and remove color button.
+    colorInput.addEventListener("input", (e) => {
+      document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
+    });
+    colorInput.addEventListener("change", (e) => {
+      document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
+    });
 
-  colorInput.addEventListener("input", (e) => {
-    document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
-    // e.target.label.innerHTML = `Hex: ${e.target.value}`;
-  });
-  colorInput.addEventListener("change", (e) => {
-    document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
-    // e.target.label.innerHTML = `Hex: ${e.target.value}`;
-  });
-
-  removeColorButton.addEventListener("click", (e) => {removeColor(e);});
+    removeColorButton.addEventListener("click", (e) => {removeColor(e);});
+  }
+  else
+  {
+    content.innerHTML = `You can only have ${maxColors} colors`;
+    // alert(`You can only have ${maxColors} colors`);
+  } 
 };
 
 const removeColor = (event) => {
-  const colors = document.querySelector("#colors");
-  let color = event.target.parentElement;
-  colors.removeChild(color);
+  if(document.querySelectorAll(".color").length > minColors)
+  {
+    const colors = document.querySelector("#colors");
+    let color = event.target.parentElement;
+    colors.removeChild(color);
+  }
+  else
+  {
+    // alert(`You must have at least ${minColors} colors`);
+    content.innerHTML = `You must have at least ${minColors} colors`;
+  }
 };
+const removePalette = (event) => {
+  let palette = event.target.parentElement;
 
+};
 const createPalette = (palette) => {
   
   let paletteElement = document.createElement("div");
@@ -151,16 +168,12 @@ const createPalette = (palette) => {
   paletteElement.id = palette.name;
   paletteElement.innerHTML += `<h3>${palette.name}</h3>`;
 
-
   let colors = document.createElement("div");
   colors.classList.add("colors");
   palette.colors.forEach(color => {
     let testColor = tinycolor(color);
-    let r = testColor._r;
-    let g = testColor._g;
-    let b = testColor._b;
     let contrastColor;
-    if ((r*0.299 + g*0.587 + b*0.114) > 150) 
+    if ((testColor._r*0.299 + testColor._g*0.587 + testColor._b*0.114) > 150) 
     {contrastColor = "black";}
     else
     { contrastColor = "white";
@@ -174,12 +187,15 @@ const createPalette = (palette) => {
   });
   paletteElement.appendChild(colors);
 
+  let removePaletteButton = document.createElement("button");
+  removePaletteButton.classList.add("removePalette");
+
+
 
   document.querySelector("#content").appendChild(paletteElement);
 
 };
 const init = () => {
-    const paletteGenerator = document.querySelector("#paletteForm");
     const userForm = document.querySelector("#userForm");
 
     const addPaletteButton = document.querySelector("#addPalette");
