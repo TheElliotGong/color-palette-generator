@@ -53,7 +53,6 @@ const addPalette = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 const getPalette = (request, response, name) => {
-
   const responseJSON = {
     message: 'Palette name is required.',
   };
@@ -91,5 +90,5 @@ module.exports = {
   notFoundMeta,
   addPalette,
   getPalettes,
-  getPalette
+  getPalette,
 };

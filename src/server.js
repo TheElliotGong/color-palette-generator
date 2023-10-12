@@ -45,26 +45,17 @@ const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
   if (urlStruct[parsedUrl.pathname]) {
-    //If the user wants to view all the palettes.
+    // If the user wants to view all the palettes.
     if (parsedUrl.pathname === '/getPalettes') {
       urlStruct[parsedUrl.pathname](request, response, params, 'loggedIn', 'yes');
     } else if (parsedUrl.pathname === '/addPalette') {
       parseBody(request, response, urlStruct[parsedUrl.pathname]);
-    }
-    //If the user wants to view an individual palette.
-    else if(parsedUrl.pathname === '/getPalette')
-    {
+    } else if (parsedUrl.pathname === '/getPalette') {
       urlStruct[parsedUrl.pathname](request, response, params.name);
-    } 
-    else {
+    } else {
       urlStruct[parsedUrl.pathname](request, response);
     }
-  }
-  else if(params['name'])
-  {
-   
-  }
-   else {
+  } else {
     urlStruct.notFound(request, response);
   }
 };
