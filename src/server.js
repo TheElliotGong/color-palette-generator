@@ -6,12 +6,27 @@
 const http = require('http');
 const url = require('url');
 const query = require('querystring');
+
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
+  GET: {
+    '/': htmlHandler.getIndex,
+    '/style.css': htmlHandler.getCSS,
+    '/bundle.js': htmlHandler.getBundle,
+    '/getPalettes': jsonHandler.getPalettes,
+    '/getPalette': jsonHandler.getPalette,
+  },
+  HEAD: {
+    '/getPalettes': jsonHandler.getPalettesMeta,
+    '/getPalette': jsonHandler.getPaletteMeta,
+    '/notFound': jsonHandler.notFoundMeta,
+  },
+  POST: { '/addPalette': jsonHandler.addPalette },
+  DELETE: { '/removePalette': jsonHandler.removePalette },
   '/': htmlHandler.getIndex,
   '/style.css': htmlHandler.getCSS,
   '/bundle.js': htmlHandler.getBundle,
@@ -42,25 +57,80 @@ const parseBody = (request, response, callback) => {
     callback(request, response, bodyParams);
   });
 };
+
+const handlePost = (request, response, parsedUrl) => {
+  switch (parsedUrl.pathname) {
+    case '/addPalette':
+      parseBody(request, response, jsonHandler.addPalette);
+      break;
+    default:
+
+      jsonHandler.notFound(request, response);
+  }
+};
+
+const handleGet = (request, response, parsedUrl, params) => {
+  switch (parsedUrl.pathname) {
+    case '/':
+      htmlHandler.getIndex(request, response);
+      break;
+    case '/style.css':
+      htmlHandler.getCSS(request, response);
+      break;
+    case '/bundle.js':
+      htmlHandler.getBundle(request, response);
+      break;
+    case '/getPalette':
+      jsonHandler.getPalette(request, response, params.name);
+      break;
+    case '/getPalettes':
+      jsonHandler.getPalettes(request, response, params, 'loggedIn', 'yes');
+      break;
+    default:
+      jsonHandler.notFound(request, response);
+  }
+};
+const handleDelete = (request, response, parsedUrl, params) => {
+  switch (parsedUrl.pathname) {
+    case '/removePalette':
+      parseBody(request, response, jsonHandler.removePalette);
+      break;
+    case '/removePalettes':
+      jsonHandler.removePalettes(request, response, params, 'loggedIn', 'yes');
+      break;
+    default:
+      jsonHandler.notFound(request, response);
+  }
+};
+
+const handleHead = (request, response, parsedUrl) => {
+  switch(parsedUrl.pathname)
+  {
+    case '/getPalettes':
+      jsonHandler.getPalettesMeta(request,response);
+      break;
+    case '/getPalette':
+      jsonHandler.getPaletteMeta(request,response);
+      break;
+    default:
+      jsonHandler.notFoundMeta(request,response);
+      break;
+  }
+}
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
-  if (urlStruct[parsedUrl.pathname]) {
-    // If the user wants to view all the palettes.
-    if (parsedUrl.pathname === '/getPalettes') {
-      urlStruct[parsedUrl.pathname](request, response, params, 'loggedIn', 'yes');
-    } else if (parsedUrl.pathname === '/addPalette') {
-      parseBody(request, response, urlStruct[parsedUrl.pathname]);
-    } else if (parsedUrl.pathname === '/removePalette') {
-      parseBody(request, response, urlStruct[parsedUrl.pathname]);
-    } else if (parsedUrl.pathname === '/getPalette') {
-      urlStruct[parsedUrl.pathname](request, response, params.name);
-    } else {
-      urlStruct[parsedUrl.pathname](request, response);
-    }
-  } else {
-    urlStruct.notFound(request, response);
+  if (request.method === 'POST') {
+    handlePost(request, response, parsedUrl);
+  } else if (request.method === 'GET') {
+    handleGet(request, response, parsedUrl, params);
+  } else if (request.method === 'DELETE') {
+    handleDelete(request, response, parsedUrl, params);
+  }else if(request.method === 'HEAD')
+  {
+    handleHead(request,response,parsedUrl);
   }
+  
 };
 
 http.createServer(onRequest).listen(port, () => {

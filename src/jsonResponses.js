@@ -1,7 +1,7 @@
 /* There is no new code in this file that is unique to this demo.
    This code is directly taken from the "Status Code" example.
 */
-const palettes = {};
+let palettes = {};
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   response.write(JSON.stringify(object));
@@ -38,10 +38,24 @@ const removePalette = (request, response, body) => {
   if (palettes[body.name]) {
     delete palettes[body.name];
     responseJSON.message = 'Palette deleted';
+    responseJSON.id = 'deletePalette';
     return respondJSON(request, response, 200, responseJSON);
   }
   responseJSON.message = 'Palette not found';
   return respondJSONMeta(request, response, 404);
+};
+
+const removePalettes = (request, response, params, attribute, paramValue) => {
+  const responseJSON = {};
+  if (!params[attribute] || params[attribute] !== paramValue) {
+    responseJSON.message = 'You do not have authorization to view this content.';
+    responseJSON.id = 'unauthorized';
+    return respondJSON(request, response, 401, responseJSON);
+  }
+  palettes = {};
+  responseJSON.message = 'All palettes deleted';
+  responseJSON.id = 'deleteAllPalettes';
+  return respondJSON(request, response, 200, responseJSON);
 };
 
 const addPalette = (request, response, body) => {
@@ -66,11 +80,14 @@ const addPalette = (request, response, body) => {
   // Return success message.
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';
+    responseJSON.id = 'createPalette';
     return respondJSON(request, response, responseCode, responseJSON);
   }
   responseJSON.message = 'Updated Successfully';
+  respondJSON.id = 'updatePalette';
   return respondJSONMeta(request, response, responseCode);
 };
+
 const getPalette = (request, response, name) => {
   const responseJSON = {
     message: 'Palette name is required.',
@@ -84,12 +101,14 @@ const getPalette = (request, response, name) => {
   if (palettes[name]) {
     responseJSON.message = 'Palette found';
     responseJSON.palette = palettes[name];
+    responseJSON.id = 'paletteFound';
     return respondJSON(request, response, 200, responseJSON);
   }
   responseJSON.message = 'Palette not found';
-  return respondJSONMeta(request, response, 404);
+  responseJSON.id = 'paletteNotFound';
+  return respondJSON(request, response, 404, responseJSON);
 };
-const getPaletteMeta = (request, response) => respondJSONMeta(request, response, 200);
+const getPaletteMeta = (request, response) => respondJSONMeta(request, response, 400);
 
 const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
@@ -117,4 +136,5 @@ module.exports = {
   getPalette,
   getPaletteMeta,
   removePalette,
+  removePalettes,
 };

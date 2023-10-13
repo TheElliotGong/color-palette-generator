@@ -36,12 +36,14 @@
       </div>
       <button id = "addColor">Add another color</button>
       <button id = "addPalette">Add Palette</button>
+      <button id = "removePalettes">Remove all Palettes</button>
       <!-- <input  type="submit" value="Add Palette" /> -->
     </form>
     <form id="userForm" action="/getPalettes?loggedIn=yes" method="get">
       <select id='urlField'>
         <option value='/getPalettes?loggedIn=yes'>/getPalettes?loggedIn=yes</option>
         <option value='/getPalettes'>/getPalettes</option>
+
       </select>
       <select id="methodSelect">
         <option value="get">GET</option>
