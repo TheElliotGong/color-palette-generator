@@ -46,7 +46,7 @@ const handleResponse = async (response) => {
     }
 
     const obj = await response.json();
-    console.log(obj);
+
     if(obj.message){
       content.innerHTML += `<p>${obj.message}</p>`;
     }
@@ -61,7 +61,6 @@ const handleResponse = async (response) => {
       else
       {
         paletteKeys.forEach(key => {
-          console.log(JSON.stringify(obj.palettes[key]));
           createPalette(obj.palettes[key]);
         });
         
@@ -116,7 +115,7 @@ const addColor = () => {
     colorInput.id = colorID;
     colorInput.type = "color";
     let colorLabel = document.createElement("label");
-    colorLabel.for = colorID;
+    colorLabel.htmlFor = colorID;
     colorLabel.innerHTML = `Hex: #000000`;
     let removeColorButton = document.createElement("button");
     removeColorButton.classList.add("removeColor");
@@ -157,8 +156,19 @@ const removeColor = (event) => {
     content.innerHTML = `You must have at least ${minColors} colors`;
   }
 };
-const removePalette = (event) => {
-  let palette = event.target.parentElement;
+const removePalette = async (event) => {
+  let paletteID = event.target.parentElement.id;
+
+  let formData = `name=${paletteID}`;
+  let response = await fetch('/removePalette', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+    },
+    body: formData,
+  });
+  handleResponse(response);
 
 };
 const createPalette = (palette) => {
@@ -186,11 +196,15 @@ const createPalette = (palette) => {
     colors.appendChild(colorElement);
   });
   paletteElement.appendChild(colors);
+  
 
   let removePaletteButton = document.createElement("button");
   removePaletteButton.classList.add("removePalette");
 
+  removePaletteButton.innerHTML = "Remove Palette";
+  removePaletteButton.addEventListener("click", (e) => {e.preventDefault();removePalette(e);});
 
+  paletteElement.appendChild(removePaletteButton);
 
   document.querySelector("#content").appendChild(paletteElement);
 
@@ -202,7 +216,7 @@ const init = () => {
     addPaletteButton.addEventListener("click", (e) => {e.preventDefault(); addPalette();});
 
     const removeColorButtons = document.querySelectorAll(".removeColor");
-    removeColorButtons.forEach(button => {button.addEventListener("click", (e) => {removeColor(e)});});
+    removeColorButtons.forEach(button => {button.addEventListener("click", (e) => {e.preventDefault();removeColor(e)});});
 
     const addColorButton = document.querySelector("#addColor");
     addColorButton.addEventListener("click", (e) => {e.preventDefault(); addColor();});

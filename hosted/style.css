@@ -16,7 +16,8 @@ html, body {
 }
 
 #content {
-  margin: 100px 10% 0;
+  margin: 100px auto 0;
+  width: fit-content;
   font-size: 2em;
   text-align: center;
   display: flex;
@@ -47,10 +48,9 @@ input[type="color"]
   gap: 8px;
   font-size: large;
 }
-.color p, h3
+.color p
 {
   width: fit-content;
-  
   margin: auto;
 }
 
