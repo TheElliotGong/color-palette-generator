@@ -25,8 +25,7 @@ const notFoundMeta = (request, response) => {
   respondJSONMeta(request, response, 404);
 };
 
-const removePalette = (request, response, body) => 
-{
+const removePalette = (request, response, body) => {
   const responseJSON = {
     message: 'Palette name is required.',
   };
@@ -43,7 +42,6 @@ const removePalette = (request, response, body) =>
   }
   responseJSON.message = 'Palette not found';
   return respondJSONMeta(request, response, 404);
-
 };
 
 const addPalette = (request, response, body) => {
@@ -91,8 +89,7 @@ const getPalette = (request, response, name) => {
   responseJSON.message = 'Palette not found';
   return respondJSONMeta(request, response, 404);
 };
-const getPaletteMeta = (request, response) => {
-  return respondJSONMeta(request, response, 200);};
+const getPaletteMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
@@ -107,9 +104,7 @@ const getPalettes = (request, response, params, attribute, paramValue) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
-const getPalettesMeta = (request, response) => {
-  return respondJSONMeta(request, response, 200);
-};
+const getPalettesMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 module.exports = {
   respondJSON,

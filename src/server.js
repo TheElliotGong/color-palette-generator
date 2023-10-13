@@ -8,7 +8,6 @@ const url = require('url');
 const query = require('querystring');
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
-const { parse } = require('path');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -52,10 +51,9 @@ const onRequest = (request, response) => {
       urlStruct[parsedUrl.pathname](request, response, params, 'loggedIn', 'yes');
     } else if (parsedUrl.pathname === '/addPalette') {
       parseBody(request, response, urlStruct[parsedUrl.pathname]);
-    } else if(parsedUrl.pathname === '/removePalette') {
+    } else if (parsedUrl.pathname === '/removePalette') {
       parseBody(request, response, urlStruct[parsedUrl.pathname]);
-    }
-    else if (parsedUrl.pathname === '/getPalette') {
+    } else if (parsedUrl.pathname === '/getPalette') {
       urlStruct[parsedUrl.pathname](request, response, params.name);
     } else {
       urlStruct[parsedUrl.pathname](request, response);
