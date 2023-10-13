@@ -83,10 +83,11 @@ const sendFetch = async () => {
   handleResponse(response, method);
 };
 
-
+/**
+ * This function adds a palette to the server using the data taken from the input forms.
+ */
 const addPalette = async () => {
 
-  //Get palette name and colors from html forms.
   const name = document.querySelector("#nameField").value;
   const colors = Array.from(document.querySelectorAll("input[type='color']")).map(color => color.value).join();
 
@@ -102,7 +103,33 @@ const addPalette = async () => {
   handleResponse(response, 'POST');
 
 };
+const removePalette = async (event) => {
+  let paletteID = event.target.parentElement.id;
 
+  let formData = `name=${paletteID}`;
+  let response = await fetch('/removePalette', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+    },
+    body: formData,
+  });
+  handleResponse(response, 'DELETE');
+
+};
+
+const removePalettes = async () => {
+
+  let response = await fetch('/removePalettes', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+    }
+  });
+  handleResponse(response, 'DELETE');
+};
 
 const addColor = () => {
   if (document.querySelectorAll(".color").length < maxColors) {
@@ -123,7 +150,6 @@ const addColor = () => {
     newColor.appendChild(colorInput);
     newColor.appendChild(colorLabel);
     newColor.appendChild(removeColorButton);
-
     document.querySelector("#colors").appendChild(newColor);
 
     //Add event listeners to new color input and remove color button.
@@ -153,21 +179,7 @@ const removeColor = (event) => {
     content.innerHTML = `You must have at least ${minColors} colors`;
   }
 };
-const removePalette = async (event) => {
-  let paletteID = event.target.parentElement.id;
 
-  let formData = `name=${paletteID}`;
-  let response = await fetch('/removePalette', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json',
-    },
-    body: formData,
-  });
-  handleResponse(response, 'DELETE');
-
-};
 const createPalette = (palette) => {
 
   let paletteElement = document.createElement("div");
@@ -200,6 +212,8 @@ const createPalette = (palette) => {
   removePaletteButton.innerHTML = "Remove Palette";
   removePaletteButton.addEventListener("click", (e) => { e.preventDefault(); removePalette(e); });
 
+
+
   paletteElement.appendChild(removePaletteButton);
 
   document.querySelector("#content").appendChild(paletteElement);
@@ -213,6 +227,10 @@ const init = () => {
 
   const removeColorButtons = document.querySelectorAll(".removeColor");
   removeColorButtons.forEach(button => { button.addEventListener("click", (e) => { e.preventDefault(); removeColor(e) }); });
+
+  const removePalettesButton = document.querySelector("#removePalettes");
+  removePalettesButton.addEventListener("click", (e) => { e.preventDefault(); removePalettes(); });
+
 
   const addColorButton = document.querySelector("#addColor");
   addColorButton.addEventListener("click", (e) => { e.preventDefault(); addColor(); });

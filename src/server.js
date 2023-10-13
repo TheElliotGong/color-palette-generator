@@ -66,13 +66,13 @@ const handleGet = (request, response, parsedUrl, params) => {
       jsonHandler.notFound(request, response);
   }
 };
-const handleDelete = (request, response, parsedUrl, params) => {
+const handleDelete = (request, response, parsedUrl) => {
   switch (parsedUrl.pathname) {
     case '/removePalette':
       parseBody(request, response, jsonHandler.removePalette);
       break;
     case '/removePalettes':
-      jsonHandler.removePalettes(request, response, params, 'loggedIn', 'yes');
+      jsonHandler.removePalettes(request, response);
       break;
     default:
       jsonHandler.notFound(request, response);

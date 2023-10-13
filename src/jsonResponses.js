@@ -42,19 +42,20 @@ const removePalette = (request, response, body) => {
     return respondJSON(request, response, 200, responseJSON);
   }
   responseJSON.message = 'Palette not found';
-  return respondJSONMeta(request, response, 404);
+  responseJSON.id = 'paletteNotFound';
+  return respondJSON(request, response, 404, responseJSON);
 };
 
-const removePalettes = (request, response, params, attribute, paramValue) => {
+const removePalettes = (request, response) => {
   const responseJSON = {};
-  if (!params[attribute] || params[attribute] !== paramValue) {
-    responseJSON.message = 'You do not have authorization to view this content.';
-    responseJSON.id = 'unauthorized';
-    return respondJSON(request, response, 401, responseJSON);
+  if (Object.keys(palettes).length === 0) {
+    responseJSON.message = 'No palettes to delete';
+    respondJSON.id = 'noPalettesFound';
+  } else {
+    palettes = {};
+    responseJSON.message = 'All palettes deleted';
+    responseJSON.id = 'deleteAllPalettes';
   }
-  palettes = {};
-  responseJSON.message = 'All palettes deleted';
-  responseJSON.id = 'deleteAllPalettes';
   return respondJSON(request, response, 200, responseJSON);
 };
 
@@ -108,7 +109,6 @@ const getPalette = (request, response, name) => {
   responseJSON.id = 'paletteNotFound';
   return respondJSON(request, response, 404, responseJSON);
 };
-const getPaletteMeta = (request, response) => respondJSONMeta(request, response, 400);
 
 const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
@@ -123,6 +123,7 @@ const getPalettes = (request, response, params, attribute, paramValue) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
+const getPaletteMeta = (request, response) => respondJSONMeta(request, response, 400);
 const getPalettesMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 module.exports = {
