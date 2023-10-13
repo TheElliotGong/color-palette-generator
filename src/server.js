@@ -12,30 +12,6 @@ const jsonHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const urlStruct = {
-  GET: {
-    '/': htmlHandler.getIndex,
-    '/style.css': htmlHandler.getCSS,
-    '/bundle.js': htmlHandler.getBundle,
-    '/getPalettes': jsonHandler.getPalettes,
-    '/getPalette': jsonHandler.getPalette,
-  },
-  HEAD: {
-    '/getPalettes': jsonHandler.getPalettesMeta,
-    '/getPalette': jsonHandler.getPaletteMeta,
-    '/notFound': jsonHandler.notFoundMeta,
-  },
-  POST: { '/addPalette': jsonHandler.addPalette },
-  DELETE: { '/removePalette': jsonHandler.removePalette },
-  '/': htmlHandler.getIndex,
-  '/style.css': htmlHandler.getCSS,
-  '/bundle.js': htmlHandler.getBundle,
-  '/addPalette': jsonHandler.addPalette,
-  '/removePalette': jsonHandler.removePalette,
-  '/getPalettes': jsonHandler.getPalettes,
-  '/getPalette': jsonHandler.getPalette,
-  notFound: jsonHandler.notFound,
-};
 const parseBody = (request, response, callback) => {
   const body = [];
   // Bad request
@@ -104,19 +80,18 @@ const handleDelete = (request, response, parsedUrl, params) => {
 };
 
 const handleHead = (request, response, parsedUrl) => {
-  switch(parsedUrl.pathname)
-  {
+  switch (parsedUrl.pathname) {
     case '/getPalettes':
-      jsonHandler.getPalettesMeta(request,response);
+      jsonHandler.getPalettesMeta(request, response);
       break;
     case '/getPalette':
-      jsonHandler.getPaletteMeta(request,response);
+      jsonHandler.getPaletteMeta(request, response);
       break;
     default:
-      jsonHandler.notFoundMeta(request,response);
+      jsonHandler.notFoundMeta(request, response);
       break;
   }
-}
+};
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
@@ -126,11 +101,9 @@ const onRequest = (request, response) => {
     handleGet(request, response, parsedUrl, params);
   } else if (request.method === 'DELETE') {
     handleDelete(request, response, parsedUrl, params);
-  }else if(request.method === 'HEAD')
-  {
-    handleHead(request,response,parsedUrl);
+  } else if (request.method === 'HEAD') {
+    handleHead(request, response, parsedUrl);
   }
-  
 };
 
 http.createServer(onRequest).listen(port, () => {
