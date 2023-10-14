@@ -1,11 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Gabarito&display=swap');
+
 html, body {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     background-color: rgb(181, 181, 181);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-
+h1, h2, h3
+{
+  font-family: 'Gabarito', sans-serif;
+}
 #top {
     text-align: center;
     margin: 0 auto;
@@ -31,8 +37,10 @@ html, body {
 }
 input[type="color"]
 {
+  
   width: 100px;
-  height:100px
+  height:100px;
+  margin: auto;
 }
 .palette, .colors
 {
