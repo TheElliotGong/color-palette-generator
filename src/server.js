@@ -79,11 +79,19 @@ const handleDelete = (request, response, parsedUrl) => {
   }
 };
 
-const handleHead = (request, response, parsedUrl) => {
+const handleHead = (request, response, parsedUrl, params) => {
   switch (parsedUrl.pathname) {
     case '/getPalettes':
-      jsonHandler.getPalettesMeta(request, response);
-      break;
+      if(params['loggedIn'] === 'yes')
+      {
+        jsonHandler.getPalettesLoggedInMeta(request, response);
+        break;
+      }
+      else
+      {
+        jsonHandler.getPalettesMeta(request, response);
+        break;
+      }
     case '/getPalette':
       jsonHandler.getPaletteMeta(request, response);
       break;
@@ -102,7 +110,7 @@ const onRequest = (request, response) => {
   } else if (request.method === 'DELETE') {
     handleDelete(request, response, parsedUrl, params);
   } else if (request.method === 'HEAD') {
-    handleHead(request, response, parsedUrl);
+    handleHead(request, response, parsedUrl, params);
   }
 };
 

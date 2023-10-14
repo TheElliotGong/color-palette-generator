@@ -124,7 +124,8 @@ const getPalettes = (request, response, params, attribute, paramValue) => {
 };
 
 const getPaletteMeta = (request, response) => respondJSONMeta(request, response, 400);
-const getPalettesMeta = (request, response) => respondJSONMeta(request, response, 200);
+const getPalettesMeta = (request, response) => respondJSONMeta(request, response, 401);
+const getPalettesLoggedInMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 module.exports = {
   respondJSON,
@@ -134,6 +135,7 @@ module.exports = {
   addPalette,
   getPalettes,
   getPalettesMeta,
+  getPalettesLoggedInMeta,
   getPalette,
   getPaletteMeta,
   removePalette,

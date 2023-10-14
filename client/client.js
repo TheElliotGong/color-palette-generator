@@ -55,7 +55,6 @@ const handleResponse = async (response, method) => {
     }
     if (obj.palettes) {
       const paletteKeys = Object.keys(obj.palettes);
-      console.log(paletteKeys);
       if (paletteKeys.length == 0) {
         content.innerHTML += `<p>No palettes found</p>`;
       }
@@ -73,7 +72,6 @@ const handleResponse = async (response, method) => {
 const sendFetch = async () => {
   const method = document.querySelector("#methodSelect").value;
   const action = document.querySelector("#urlField").value;
-  console.log()
   const response = await fetch(action, {
     method,
     headers: {
@@ -132,7 +130,9 @@ const removePalettes = async () => {
 };
 
 const addColor = () => {
+  const content = document.querySelector("#content");
   if (document.querySelectorAll(".color").length < maxColors) {
+    content.innerHTML = "";
     //Create new color input and label.
     let newColor = document.createElement("div");
     let colorID = generateUniqueId({ length: 6 });
@@ -150,17 +150,19 @@ const addColor = () => {
     newColor.appendChild(colorInput);
     newColor.appendChild(colorLabel);
     newColor.appendChild(removeColorButton);
-    document.querySelector("#colors").appendChild(newColor);
+    
 
     //Add event listeners to new color input and remove color button.
     colorInput.addEventListener("input", (e) => {
-      document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
+      colorLabel.innerHTML = `Hex: ${e.target.value}`;
     });
     colorInput.addEventListener("change", (e) => {
-      document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value}`;
+      colorLabel.innerHTML = `Hex: ${e.target.value}`;
     });
 
     removeColorButton.addEventListener("click", (e) => { removeColor(e); });
+    
+    document.querySelector("#colors").appendChild(newColor);
   }
   else {
     content.innerHTML = `You can only have ${maxColors} colors`;
@@ -169,10 +171,10 @@ const addColor = () => {
 };
 
 const removeColor = (event) => {
+  const content = document.querySelector("#content");
   if (document.querySelectorAll(".color").length > minColors) {
-    const colors = document.querySelector("#colors");
-    let color = event.target.parentElement;
-    colors.removeChild(color);
+    content.innerHTML = "";
+    document.querySelector("#colors").removeChild(event.target.parentElement);
   }
   else {
     // alert(`You must have at least ${minColors} colors`);
