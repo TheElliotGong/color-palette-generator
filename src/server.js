@@ -1,39 +1,49 @@
-/* Nothing in this file is new for this demo, other than
-   that we are routing requests for /bundle.js to the
-   htmlHandler's getBundle function using the url struct.
+/*
+Author: Elliot Gong
+Purpose: Handle server responses.
+Date: 10/14/2023
 */
 
+//helper fields
 const http = require('http');
 const url = require('url');
 const query = require('querystring');
-
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
-
+/**
+ * Helper function that deals with data that'll be used for POSTS and DELETE requests
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} callback the function that'll use the parsed data.
+ */
 const parseBody = (request, response, callback) => {
   const body = [];
-  // Bad request
+  // Handle errors with a bad request status code and message.
   request.on('error', (err) => {
     console.dir(err);
     response.statusCode = 400;
     response.end();
   });
-
+  // Add each new chunk of data to the body array.
   request.on('data', (chunk) => {
     body.push(chunk);
   });
+  // When all data has been received, parse the body array and send back a response.
   request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
-
-    // Once we have the bodyParams object, we will call the handler function. We then
-    // proceed much like we would with a GET request.
+    //Use body data to call the callback function.
     callback(request, response, bodyParams);
   });
 };
-
+/**
+ * This function handles post requests for adding palettes to the server.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} parsedUrl the requested url to check for.
+ */
 const handlePost = (request, response, parsedUrl) => {
   switch (parsedUrl.pathname) {
     case '/addPalette':
@@ -94,8 +104,8 @@ const handleDelete = (request, response, parsedUrl) => {
  * This function handles the head requests for palettes and other data.
  * @param {*} request 
  * @param {*} response 
- * @param {*} parsedUrl 
- * @param {*} params 
+ * @param {*} parsedUrl the requested url to check for.
+ * @param {*} params the query parameters associated with the requested url.
  */
 const handleHead = (request, response, parsedUrl, params) => {
   switch (parsedUrl.pathname) {

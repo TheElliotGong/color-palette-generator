@@ -1,26 +1,23 @@
-/* Here we are using the require() syntax in our client javascript. Usually
-   we are not able to do this, because the browser does not have built in
-   support for CommonJS (where require() comes from) by default. However,
-   webpack allows us to use this syntax. When webpack runs and builds our
-   bundle.js (in the hosted folder), it will replace these require statements
-   will the contents of the files and packages we are importing so that we have
-   a browser-friendly version to send to the client.
+/*
+Author: Elliot Gong
+Purpose: Create functions for client requests and handling server responses.
+Date: 10/14/2023
 */
 
-
-/* Most of the below code is ripped straight from the "Status Code" demo. The only
-   parts unique to this example are at the bottom of the init function. Look there
-   for more comments.
-*/
+//Helper fields
 const tinycolor = require("tinycolor2");
 const generateUniqueId = require('generate-unique-id');
 const minColors = 2;
 const maxColors = 6;
 
-
+/**
+ * This helper function updates the client page based on the response from the server.
+ * @param {*} response 
+ * @param {*} method The type of request made to the server
+ */
 const handleResponse = async (response, method) => {
   const content = document.getElementById('content');
-
+  //Change the header based on the response status
   switch (response.status) {
     case 200:
       content.innerHTML = `<b>Success</b>`;
@@ -185,70 +182,75 @@ const addColor = () => {
     // alert(`You can only have ${maxColors} colors`);
   }
 };
-
+/**
+ * This function removes a color input from the form, reducing the number of colors in the palette.
+ * @param {*} event 
+ */
 const removeColor = (event) => {
+
   const content = document.querySelector("#content");
+  //Check if minimum number of colors isn't met.
   if (document.querySelector("#top").querySelectorAll(".color").length > minColors) {
     content.innerHTML = "";
     document.querySelector("#colors").removeChild(event.target.parentElement);
   }
   else {
-    // alert(`You must have at least ${minColors} colors`);
     content.innerHTML = `You must have at least ${minColors} colors`;
   }
 };
-
+/**
+ * This function creates a palette element and adds it to the page.
+ * @param {*} palette The data for the palette to be created.
+ */
 const createPalette = (palette) => {
-
+  //Create the palette element and its children.
   let paletteElement = document.createElement("div");
   paletteElement.classList.add("palette");
   paletteElement.id = palette.name;
-  
 
   let top = document.createElement("div");
   top.classList.add("top");
 
   let colors = document.createElement("div");
-
   colors.classList.add("colors");
+
   palette.colors.forEach(color => {
+    //Check if the contrasting color should be black or white depending on the rgb values.
     let testColor = tinycolor(color);
     let contrastColor;
     if ((testColor._r * 0.299 + testColor._g * 0.587 + testColor._b * 0.114) > 150) { contrastColor = "black"; }
     else {
       contrastColor = "white";
     }
-
+    //Set up the html content.
     let colorElement = `<div class="color" style="background-color: ${color};color:${contrastColor};height:100px;">
     <p>${color.replace("#","")}</p></div>`;
     colors.innerHTML += colorElement;
   });
   top.appendChild(colors);
   
-
+  //Add buttons to support palette removal.
   let removePaletteButton = document.createElement("button");
   removePaletteButton.classList.add("removePalette");
 
   removePaletteButton.innerHTML = "Remove Palette";
   removePaletteButton.addEventListener("click", (e) => { e.preventDefault(); removePalette(e); });
-
-
-
   top.appendChild(removePaletteButton);
+
+  //Add elements to the client page.
   paletteElement.appendChild(top);
   paletteElement.innerHTML += `<h3>${palette.name}</h3>`;
   document.querySelector("#content").appendChild(paletteElement);
 
+  //Set width of each color so they all have equal proportions when fitting into their parent.
   let colorElements = document.querySelector("#content").querySelector(`#${palette.name}`).querySelector(".colors");
 
   colorElements.querySelectorAll(".color").forEach(color => {color.style.width = 
     `${colorElements.getBoundingClientRect().width / colorElements.querySelectorAll(".color").length}%`;});
-  
-
 };
 //Set up everything.
 const init = () => {
-  //Add event listeners to all the buttons and color inputs.
+  //Add event listeners to all the buttons, form, and color inputs.
   const userForm = document.querySelector("#userForm");
 
   const addPaletteButton = document.querySelector("#addPalette");
@@ -271,16 +273,11 @@ const init = () => {
   colors.forEach(color => {
     color.addEventListener("input", (e) => {
       document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value.replace("#","")}`;
-      // e.target.label.innerHTML = `Hex: ${e.target.value}`;
     });
     color.addEventListener("change", (e) => {
       document.querySelector(`label[for=${e.target.id}]`).innerHTML = `Hex: ${e.target.value.replace("#","")}`;
-      // e.target.label.innerHTML = `Hex: ${e.target.value}`;
     });
   });
-
-
-
 };
 
 window.onload = init;

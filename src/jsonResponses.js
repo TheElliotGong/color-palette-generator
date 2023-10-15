@@ -1,18 +1,38 @@
-/* There is no new code in this file that is unique to this demo.
-   This code is directly taken from the "Status Code" example.
+/*
+Author: Elliot Gong
+Purpose: Create functions for handling palettes stored in the server.
+Date: 10/14/2023
 */
+
 let palettes = {};
+
+/**
+ * Helper function to return json data to the client in response to a non-HEAD request.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} status the http status code associated with the response.
+ * @param {*} object the content to be returned.
+ */
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   response.write(JSON.stringify(object));
   response.end();
 };
-
+/**
+ * Helper function to return meta data to the client in response to a HEAD request.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} status the http status code associated with the response.
+ */
 const respondJSONMeta = (request, response, status) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   response.end();
 };
-
+/**
+ * Deals with GET requests for content that does not exist.
+ * @param {*} request 
+ * @param {*} response 
+ */
 const notFound = (request, response) => {
   const responseJSON = {
     message: 'The page you are looking for was not found.',
@@ -20,11 +40,21 @@ const notFound = (request, response) => {
   };
   respondJSON(request, response, 404, responseJSON);
 };
-
+/**
+ * Deals with HEAD requests for content that does not exist.
+ * @param {*} request 
+ * @param {*} response 
+ */
 const notFoundMeta = (request, response) => {
   respondJSONMeta(request, response, 404);
 };
-
+/**
+ * Removes a palette from the server
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} body the data sent from the client.
+ * @returns 
+ */
 const removePalette = (request, response, body) => {
   const responseJSON = {
     message: 'Palette name is required.',
@@ -41,17 +71,25 @@ const removePalette = (request, response, body) => {
     responseJSON.id = 'deletePalette';
     return respondJSON(request, response, 200, responseJSON);
   }
+  // Return error message if palette not found.
   responseJSON.message = 'Palette not found';
   responseJSON.id = 'paletteNotFound';
   return respondJSON(request, response, 404, responseJSON);
 };
-
+/**
+ * Removes all the palettes from the server.
+ * @param {*} request 
+ * @param {*} response 
+ * @returns 
+ */
 const removePalettes = (request, response) => {
   const responseJSON = {};
+  //Send different response if no palettes exist.
   if (Object.keys(palettes).length === 0) {
     responseJSON.message = 'No palettes to delete';
     respondJSON.id = 'noPalettesFound';
-  } else {
+  }//Otherwise, delete all palettes. 
+  else {
     palettes = {};
     responseJSON.message = 'All palettes deleted';
     responseJSON.id = 'deleteAllPalettes';
@@ -75,10 +113,10 @@ const addPalette = (request, response, body) => {
     responseCode = 201;
     palettes[body.name] = {};
   }
-  // Update palette data.
+  // Update or insert palette data.
   palettes[body.name].name = body.name;
   palettes[body.name].colors = body.colors.split(',');
-  // Return success message.
+  // Return success message upon palette creation or deletion.
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';
     responseJSON.id = 'createPalette';
@@ -88,7 +126,13 @@ const addPalette = (request, response, body) => {
   respondJSON.id = 'updatePalette';
   return respondJSONMeta(request, response, responseCode);
 };
-
+/**
+ * Return a specified palette from the server.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} name the name of the specified palette.
+ * @returns 
+ */
 const getPalette = (request, response, name) => {
   const responseJSON = {
     message: 'Palette name is required.',
@@ -105,11 +149,20 @@ const getPalette = (request, response, name) => {
     responseJSON.id = 'paletteFound';
     return respondJSON(request, response, 200, responseJSON);
   }
+  //Return error message if palette not found.
   responseJSON.message = 'Palette not found';
   responseJSON.id = 'paletteNotFound';
   return respondJSON(request, response, 404, responseJSON);
 };
-
+/**
+ * Get all the palettes, but only if the user is 'logged in'.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} params the query params associated with the requested url.
+ * @param {*} attribute the attribute to check for.
+ * @param {*} paramValue the attribute value to check for
+ * @returns 
+ */
 const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
   // Check if query parameters are valid.
@@ -123,8 +176,7 @@ const getPalettes = (request, response, params, attribute, paramValue) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
-
-
+//Export the functions.
 module.exports = {
   respondJSON,
   respondJSONMeta,
