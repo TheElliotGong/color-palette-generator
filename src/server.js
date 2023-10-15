@@ -44,7 +44,13 @@ const handlePost = (request, response, parsedUrl) => {
       jsonHandler.notFound(request, response);
   }
 };
-
+/**
+ * This function handles get requests for palette and other data.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} parsedUrl the requested url to check for.
+ * @param {*} params the query parameters associated with the requested url
+ */
 const handleGet = (request, response, parsedUrl, params) => {
   switch (parsedUrl.pathname) {
     case '/':
@@ -66,6 +72,12 @@ const handleGet = (request, response, parsedUrl, params) => {
       jsonHandler.notFound(request, response);
   }
 };
+/**
+ * This function handles the deletion requests for palettes stored in the server.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} parsedUrl the requested url to check for.
+ */
 const handleDelete = (request, response, parsedUrl) => {
   switch (parsedUrl.pathname) {
     case '/removePalette':
@@ -78,17 +90,20 @@ const handleDelete = (request, response, parsedUrl) => {
       jsonHandler.notFound(request, response);
   }
 };
-
+/**
+ * This function handles the head requests for palettes and other data.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} parsedUrl 
+ * @param {*} params 
+ */
 const handleHead = (request, response, parsedUrl, params) => {
   switch (parsedUrl.pathname) {
     case '/getPalettes':
-      if(params['loggedIn'] === 'yes')
-      {
+      if (params.loggedIn === 'yes') {
         jsonHandler.getPalettesLoggedInMeta(request, response);
         break;
-      }
-      else
-      {
+      } else {
         jsonHandler.getPalettesMeta(request, response);
         break;
       }
@@ -100,6 +115,11 @@ const handleHead = (request, response, parsedUrl, params) => {
       break;
   }
 };
+/**
+ * This function handles all types of requests and is called when the server is up.
+ * @param {*} request 
+ * @param {*} response 
+ */
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = query.parse(parsedUrl.query);
