@@ -101,14 +101,14 @@ const handleHead = (request, response, parsedUrl, params) => {
   switch (parsedUrl.pathname) {
     case '/getPalettes':
       if (params.loggedIn === 'yes') {
-        jsonHandler.getPalettesLoggedInMeta(request, response);
+        jsonHandler.respondJSONMeta(request, response, 200);
         break;
       } else {
-        jsonHandler.getPalettesMeta(request, response);
+        jsonHandler.respondJSONMeta(request, response, 401);
         break;
       }
     case '/getPalette':
-      jsonHandler.getPaletteMeta(request, response);
+      jsonHandler.respondJSONMeta(request, response, 400);
       break;
     default:
       jsonHandler.notFoundMeta(request, response);

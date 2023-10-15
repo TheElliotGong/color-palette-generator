@@ -47,9 +47,10 @@ const handleResponse = async (response, method) => {
       content.innerHTML = `<p>Status Code not Implemented By Client</p>`;
       break;
   }
+  //Only add content if the user doesn't send a head request.
   if(method != 'head'){
     let obj = await response.json();
-
+    //Print out appropriate data if present.
     if (obj.message) {
       content.innerHTML += `<p>${obj.message}</p>`;
     }
@@ -68,7 +69,9 @@ const handleResponse = async (response, method) => {
   
   }
 };
-
+/**
+ * This response sends a fetch request(GET or HEAD) to the server using the data taken from the input forms.
+ */
 const sendFetch = async () => {
   const method = document.querySelector("#methodSelect").value;
   const action = document.querySelector("#urlField").value;
@@ -82,14 +85,15 @@ const sendFetch = async () => {
 };
 
 /**
- * This function adds a palette to the server using the data taken from the input forms.
+ * This function adds a palette to the server(POST) using the data taken from the input forms.
  */
 const addPalette = async () => {
 
+  //Collect and organize data from the form.
   const name = document.querySelector("#nameField").value;
   const colors = Array.from(document.querySelectorAll("input[type='color']")).map(color => color.value).join();
-
   const formData = `name=${name}&colors=${colors}`;
+  //Send request with fetch.
   let response = await fetch('/addPalette', {
     method: 'POST',
     headers: {
@@ -101,24 +105,31 @@ const addPalette = async () => {
   handleResponse(response, 'POST');
 
 };
+/**
+ * This function removes a chosen palette(DELETE) from the server.
+ * @param {*} event 
+ */
 const removePalette = async (event) => {
-  let paletteID = event.target.parentElement.id;
 
-  let formData = `name=${paletteID}`;
+
+  //Send delete request with fetch using the name of the palette to be deleted.
   let response = await fetch('/removePalette', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
     },
-    body: formData,
+    body: `name=${event.target.parentElement.id}`,
   });
   handleResponse(response, 'DELETE');
 
 };
-
+/**
+ * This function removes all palettes from the server.
+ */
 const removePalettes = async () => {
 
+  //Send delete request with fetch.
   let response = await fetch('/removePalettes', {
     method: 'DELETE',
     headers: {
@@ -128,7 +139,9 @@ const removePalettes = async () => {
   });
   handleResponse(response, 'DELETE');
 };
-
+/**
+ * This function adds a color input to the form.
+ */
 const addColor = () => {
   const content = document.querySelector("#content");
   if (document.querySelector("#top").querySelectorAll(".color").length < maxColors) {
@@ -136,21 +149,19 @@ const addColor = () => {
     //Create new color input and label.
     let newColor = document.createElement("div");
     let colorID = generateUniqueId({ length: 6 });
-
     newColor.classList.add("color");
+    //Create input elements for the new color.
     let colorInput = document.createElement("input");
     colorInput.id = colorID;
     colorInput.type = "color";
+
     let colorLabel = document.createElement("label");
     colorLabel.htmlFor = colorID;
     colorLabel.innerHTML = `Hex: 000000`;
+
     let removeColorButton = document.createElement("button");
     removeColorButton.classList.add("removeColor");
     removeColorButton.innerHTML = "Remove Color";
-    newColor.appendChild(colorInput);
-    newColor.appendChild(colorLabel);
-    newColor.appendChild(removeColorButton);
-    
 
     //Add event listeners to new color input and remove color button.
     colorInput.addEventListener("input", (e) => {
@@ -161,7 +172,12 @@ const addColor = () => {
     });
 
     removeColorButton.addEventListener("click", (e) => { removeColor(e); });
-    
+
+    //Combine new elements and add the color to the palette.
+    newColor.appendChild(colorInput);
+    newColor.appendChild(colorLabel);
+    newColor.appendChild(removeColorButton);
+
     document.querySelector("#colors").appendChild(newColor);
   }
   else {
@@ -230,7 +246,9 @@ const createPalette = (palette) => {
   
 
 };
+//Set up everything.
 const init = () => {
+  //Add event listeners to all the buttons and color inputs.
   const userForm = document.querySelector("#userForm");
 
   const addPaletteButton = document.querySelector("#addPalette");
@@ -241,7 +259,6 @@ const init = () => {
 
   const removePalettesButton = document.querySelector("#removePalettes");
   removePalettesButton.addEventListener("click", (e) => { e.preventDefault(); removePalettes(); });
-
 
   const addColorButton = document.querySelector("#addColor");
   addColorButton.addEventListener("click", (e) => { e.preventDefault(); addColor(); });
