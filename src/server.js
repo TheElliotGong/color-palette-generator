@@ -4,7 +4,7 @@ Purpose: Handle server responses.
 Date: 10/14/2023
 */
 
-//helper fields
+// helper fields
 const http = require('http');
 const url = require('url');
 const query = require('querystring');
@@ -14,9 +14,9 @@ const jsonHandler = require('./jsonResponses.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 /**
  * Helper function that deals with data that'll be used for POSTS and DELETE requests
- * @param {*} request 
- * @param {*} response 
- * @param {*} callback the function that'll use the parsed data.
+ * @param {*} request
+ * @param {*} response
+ * @param {*} callback = the function that'll use the parsed data.
  */
 const parseBody = (request, response, callback) => {
   const body = [];
@@ -34,15 +34,15 @@ const parseBody = (request, response, callback) => {
   request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
-    //Use body data to call the callback function.
+    // Use body data to call the callback function.
     callback(request, response, bodyParams);
   });
 };
 /**
  * This function handles post requests for adding palettes to the server.
- * @param {*} request 
- * @param {*} response 
- * @param {*} parsedUrl the requested url to check for.
+ * @param {*} request
+ * @param {*} response
+ * @param {*} parsedUrl = the requested url to check for.
  */
 const handlePost = (request, response, parsedUrl) => {
   switch (parsedUrl.pathname) {
@@ -56,10 +56,10 @@ const handlePost = (request, response, parsedUrl) => {
 };
 /**
  * This function handles get requests for palette and other data.
- * @param {*} request 
- * @param {*} response 
- * @param {*} parsedUrl the requested url to check for.
- * @param {*} params the query parameters associated with the requested url
+ * @param {*} request
+ * @param {*} response
+ * @param {*} parsedUrl = the requested url to check for.
+ * @param {*} params = the query parameters associated with the requested url
  */
 const handleGet = (request, response, parsedUrl, params) => {
   switch (parsedUrl.pathname) {
@@ -84,9 +84,9 @@ const handleGet = (request, response, parsedUrl, params) => {
 };
 /**
  * This function handles the deletion requests for palettes stored in the server.
- * @param {*} request 
- * @param {*} response 
- * @param {*} parsedUrl the requested url to check for.
+ * @param {*} request
+ * @param {*} response
+ * @param {*} parsedUrl = the requested url to check for.
  */
 const handleDelete = (request, response, parsedUrl) => {
   switch (parsedUrl.pathname) {
@@ -102,10 +102,10 @@ const handleDelete = (request, response, parsedUrl) => {
 };
 /**
  * This function handles the head requests for palettes and other data.
- * @param {*} request 
- * @param {*} response 
- * @param {*} parsedUrl the requested url to check for.
- * @param {*} params the query parameters associated with the requested url.
+ * @param {*} request
+ * @param {*} response
+ * @param {*} parsedUrl = the requested url to check for.
+ * @param {*} params = the query parameters associated with the requested url.
  */
 const handleHead = (request, response, parsedUrl, params) => {
   switch (parsedUrl.pathname) {
@@ -127,8 +127,8 @@ const handleHead = (request, response, parsedUrl, params) => {
 };
 /**
  * This function handles all types of requests and is called when the server is up.
- * @param {*} request 
- * @param {*} response 
+ * @param {*} request
+ * @param {*} response
  */
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);

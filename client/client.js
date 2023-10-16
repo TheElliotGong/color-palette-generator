@@ -13,7 +13,7 @@ const maxColors = 6;
 /**
  * This helper function updates the client page based on the response from the server.
  * @param {*} response 
- * @param {*} method The type of request made to the server
+ * @param {*} method = The type of request made to the server
  */
 const handleResponse = async (response, method) => {
   const content = document.getElementById('content');
@@ -60,10 +60,8 @@ const handleResponse = async (response, method) => {
         paletteKeys.forEach(key => {
           createPalette(obj.palettes[key]);
         });
-
       }
-    }
-  
+    }  
   }
 };
 /**
@@ -85,7 +83,6 @@ const sendFetch = async () => {
  * This function adds a palette to the server(POST) using the data taken from the input forms.
  */
 const addPalette = async () => {
-
   //Collect and organize data from the form.
   const name = document.querySelector("#nameField").value;
   const colors = Array.from(document.querySelectorAll("input[type='color']")).map(color => color.value).join();
@@ -100,15 +97,12 @@ const addPalette = async () => {
     body: formData,
   });
   handleResponse(response, 'POST');
-
 };
 /**
  * This function removes a chosen palette(DELETE) from the server.
  * @param {*} event 
  */
 const removePalette = async (event) => {
-
-
   //Send delete request with fetch using the name of the palette to be deleted.
   let response = await fetch('/removePalette', {
     method: 'DELETE',
@@ -119,13 +113,11 @@ const removePalette = async (event) => {
     body: `name=${event.target.parentElement.id}`,
   });
   handleResponse(response, 'DELETE');
-
 };
 /**
  * This function removes all palettes from the server.
  */
 const removePalettes = async () => {
-
   //Send delete request with fetch.
   let response = await fetch('/removePalettes', {
     method: 'DELETE',
@@ -187,7 +179,6 @@ const addColor = () => {
  * @param {*} event 
  */
 const removeColor = (event) => {
-
   const content = document.querySelector("#content");
   //Check if minimum number of colors isn't met.
   if (document.querySelector("#top").querySelectorAll(".color").length > minColors) {

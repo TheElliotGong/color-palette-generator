@@ -8,8 +8,8 @@ let palettes = {};
 
 /**
  * Helper function to return json data to the client in response to a non-HEAD request.
- * @param {*} request 
- * @param {*} response 
+ * @param {*} request
+ * @param {*} response
  * @param {*} status the http status code associated with the response.
  * @param {*} object the content to be returned.
  */
@@ -20,8 +20,8 @@ const respondJSON = (request, response, status, object) => {
 };
 /**
  * Helper function to return meta data to the client in response to a HEAD request.
- * @param {*} request 
- * @param {*} response 
+ * @param {*} request
+ * @param {*} response
  * @param {*} status the http status code associated with the response.
  */
 const respondJSONMeta = (request, response, status) => {
@@ -30,8 +30,8 @@ const respondJSONMeta = (request, response, status) => {
 };
 /**
  * Deals with GET requests for content that does not exist.
- * @param {*} request 
- * @param {*} response 
+ * @param {*} request
+ * @param {*} response
  */
 const notFound = (request, response) => {
   const responseJSON = {
@@ -42,18 +42,18 @@ const notFound = (request, response) => {
 };
 /**
  * Deals with HEAD requests for content that does not exist.
- * @param {*} request 
- * @param {*} response 
+ * @param {*} request
+ * @param {*} response
  */
 const notFoundMeta = (request, response) => {
   respondJSONMeta(request, response, 404);
 };
 /**
  * Removes a palette from the server
- * @param {*} request 
- * @param {*} response 
+ * @param {*} request
+ * @param {*} response
  * @param {*} body the data sent from the client.
- * @returns 
+ * @returns
  */
 const removePalette = (request, response, body) => {
   const responseJSON = {
@@ -78,25 +78,30 @@ const removePalette = (request, response, body) => {
 };
 /**
  * Removes all the palettes from the server.
- * @param {*} request 
- * @param {*} response 
- * @returns 
+ * @param {*} request
+ * @param {*} response
+ * @returns
  */
 const removePalettes = (request, response) => {
   const responseJSON = {};
-  //Send different response if no palettes exist.
+  // Send different response if no palettes exist.
   if (Object.keys(palettes).length === 0) {
     responseJSON.message = 'No palettes to delete';
     respondJSON.id = 'noPalettesFound';
-  }//Otherwise, delete all palettes. 
-  else {
+  } else {
     palettes = {};
     responseJSON.message = 'All palettes deleted';
     responseJSON.id = 'deleteAllPalettes';
   }
   return respondJSON(request, response, 200, responseJSON);
 };
-
+/**
+ * This function adds a palette to the server
+ * @param {*} request
+ * @param {*} response
+ * @param {*} body = the palette data sent from the client.
+ * @returns
+ */
 const addPalette = (request, response, body) => {
   const responseJSON = {
     message: 'Palette name and colors are required.',
@@ -128,10 +133,10 @@ const addPalette = (request, response, body) => {
 };
 /**
  * Return a specified palette from the server.
- * @param {*} request 
- * @param {*} response 
- * @param {*} name the name of the specified palette.
- * @returns 
+ * @param {*} request
+ * @param {*} response
+ * @param {*} name = the name of the specified palette.
+ * @returns
  */
 const getPalette = (request, response, name) => {
   const responseJSON = {
@@ -149,19 +154,19 @@ const getPalette = (request, response, name) => {
     responseJSON.id = 'paletteFound';
     return respondJSON(request, response, 200, responseJSON);
   }
-  //Return error message if palette not found.
+  // Return error message if palette not found.
   responseJSON.message = 'Palette not found';
   responseJSON.id = 'paletteNotFound';
   return respondJSON(request, response, 404, responseJSON);
 };
 /**
  * Get all the palettes, but only if the user is 'logged in'.
- * @param {*} request 
- * @param {*} response 
- * @param {*} params the query params associated with the requested url.
- * @param {*} attribute the attribute to check for.
- * @param {*} paramValue the attribute value to check for
- * @returns 
+ * @param {*} request
+ * @param {*} response
+ * @param {*} params = the query params associated with the requested url.
+ * @param {*} attribute = the attribute to check for.
+ * @param {*} paramValue = the attribute value to check for
+ * @returns
  */
 const getPalettes = (request, response, params, attribute, paramValue) => {
   let responseJSON = {};
@@ -176,7 +181,7 @@ const getPalettes = (request, response, params, attribute, paramValue) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
-//Export the functions.
+// Export the functions.
 module.exports = {
   respondJSON,
   respondJSONMeta,
