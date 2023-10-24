@@ -102,7 +102,7 @@ const addPalette = async () => {
  * This function removes a chosen palette(DELETE) from the server.
  * @param {*} event 
  */
-const removePalette = async (event) => {
+const removePalette = async (name) => {
   //Send delete request with fetch using the name of the palette to be deleted.
   let response = await fetch('/removePalette', {
     method: 'DELETE',
@@ -110,7 +110,7 @@ const removePalette = async (event) => {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
     },
-    body: `name=${event.target.parentElement.parentElement.id}`,
+    body: `name:${name}`,
   });
   handleResponse(response, 'DELETE');
 };
@@ -198,9 +198,11 @@ const createPalette = (palette) => {
   let paletteElement = document.createElement("div");
   paletteElement.classList.add("palette");
   paletteElement.id = palette.name;
+  document.querySelector("#content").appendChild(paletteElement);
 
   let top = document.createElement("div");
   top.classList.add("top");
+  paletteElement.appendChild(top);
 
   let colors = document.createElement("div");
   colors.classList.add("colors");
@@ -224,19 +226,21 @@ const createPalette = (palette) => {
   let removePaletteButton = document.createElement("button");
   removePaletteButton.classList.add("removePalette");
   removePaletteButton.innerHTML = "Remove Palette";
-  removePaletteButton.addEventListener("click", (e) => {removePalette(e); });
   top.appendChild(removePaletteButton);
 
   //Add elements to the client page.
-  paletteElement.appendChild(top);
+  
   paletteElement.innerHTML += `<h3>${palette.name}</h3>`;
-  document.querySelector("#content").appendChild(paletteElement);
+  
 
   //Set width of each color so they all have equal proportions when fitting into their parent.
+
   let colorElements = document.querySelector("#content").querySelector(`#${palette.name}`).querySelector(".colors");
 
   colorElements.querySelectorAll(".color").forEach(color => {color.style.width = 
     `${colorElements.getBoundingClientRect().width / colorElements.querySelectorAll(".color").length}%`;});
+  //Add button functionality
+  document.querySelector("#content").querySelector(`#${palette.name}`).querySelector(".removePalette").addEventListener("click", (e) => {removePalette(palette.name); });
 };
 //Set up everything.
 const init = () => {
