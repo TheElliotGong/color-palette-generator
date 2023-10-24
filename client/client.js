@@ -110,7 +110,7 @@ const removePalette = async (event) => {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
     },
-    body: `name=${event.target.parentElement.id}`,
+    body: `name=${event.target.parentElement.parentElement.id}`,
   });
   handleResponse(response, 'DELETE');
 };
@@ -223,9 +223,8 @@ const createPalette = (palette) => {
   //Add buttons to support palette removal.
   let removePaletteButton = document.createElement("button");
   removePaletteButton.classList.add("removePalette");
-
   removePaletteButton.innerHTML = "Remove Palette";
-  removePaletteButton.addEventListener("click", (e) => { e.preventDefault(); removePalette(e); });
+  removePaletteButton.addEventListener("click", (e) => {removePalette(e); });
   top.appendChild(removePaletteButton);
 
   //Add elements to the client page.

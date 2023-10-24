@@ -131,34 +131,7 @@ const addPalette = (request, response, body) => {
   respondJSON.id = 'updatePalette';
   return respondJSONMeta(request, response, responseCode);
 };
-/**
- * Return a specified palette from the server.
- * @param {*} request
- * @param {*} response
- * @param {*} name = the name of the specified palette.
- * @returns
- */
-const getPalette = (request, response, name) => {
-  const responseJSON = {
-    message: 'Palette name is required.',
-  };
-  // Return bad request error if parameters not specified.
-  if (!name) {
-    responseJSON.id = 'missingParams';
-    return respondJSON(request, response, 400, responseJSON);
-  }
-  // Return success message.
-  if (palettes[name]) {
-    responseJSON.message = 'Palette found';
-    responseJSON.palette = palettes[name];
-    responseJSON.id = 'paletteFound';
-    return respondJSON(request, response, 200, responseJSON);
-  }
-  // Return error message if palette not found.
-  responseJSON.message = 'Palette not found';
-  responseJSON.id = 'paletteNotFound';
-  return respondJSON(request, response, 404, responseJSON);
-};
+
 /**
  * Get all the palettes, but only if the user is 'logged in'.
  * @param {*} request
@@ -168,13 +141,20 @@ const getPalette = (request, response, name) => {
  * @param {*} paramValue = the attribute value to check for
  * @returns
  */
-const getPalettes = (request, response, params, attribute, paramValue) => {
+const getPalettes = (request, response, params) => {
   let responseJSON = {};
-  // Check if query parameters are valid.
-  if (!params[attribute] || params[attribute] !== paramValue) {
-    responseJSON.message = 'You do not have authorization to view this content.';
-    responseJSON.id = 'unauthorized';
-    return respondJSON(request, response, 401, responseJSON);
+  // Check if user wants to get a palette by name
+  if (params.name) {
+    if (!palettes[params.name]) {
+      responseJSON.message = 'Palette not found';
+      responseJSON.id = 'paletteNotFound';
+      return respondJSON(request, response, 400, responseJSON);
+    }
+
+    responseJSON.message = 'Palette found';
+    responseJSON.palette = palettes[params.name];
+    responseJSON.id = 'paletteFound';
+    return respondJSON(request, response, 200, responseJSON);
   }
   // If query parameters are valid, return all palettes.
   responseJSON = { palettes };
@@ -189,7 +169,6 @@ module.exports = {
   notFoundMeta,
   addPalette,
   getPalettes,
-  getPalette,
   removePalette,
   removePalettes,
 };

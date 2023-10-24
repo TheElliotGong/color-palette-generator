@@ -72,11 +72,8 @@ const handleGet = (request, response, parsedUrl, params) => {
     case '/bundle.js':
       htmlHandler.getBundle(request, response);
       break;
-    case '/getPalette':
-      jsonHandler.getPalette(request, response, params.name);
-      break;
     case '/getPalettes':
-      jsonHandler.getPalettes(request, response, params, 'loggedIn', 'yes');
+      jsonHandler.getPalettes(request, response, params);
       break;
     default:
       jsonHandler.notFound(request, response);
