@@ -84,7 +84,7 @@ const sendFetch = async () => {
  */
 const addPalette = async () => {
   //Collect and organize data from the form.
-  const name = document.querySelector("#nameField").value.replace(" ", "_");
+  const name = document.querySelector("#nameField").value.replace(/ /g, "_");
   const colors = Array.from(document.querySelectorAll("input[type='color']")).map(color => color.value).join();
   const formData = `name=${name}&colors=${colors}`;
   //Send request with fetch.
@@ -230,7 +230,7 @@ const createPalette = (palette) => {
 
   //Add elements to the client page.
   
-  paletteElement.innerHTML += `<h3>${palette.name.replace("_", " ")}</h3>`;
+  paletteElement.innerHTML += `<h3>${palette.name.replace(/_/g, " ")}</h3>`;
   
 
   //Set width of each color so they all have equal proportions when fitting into their parent.
