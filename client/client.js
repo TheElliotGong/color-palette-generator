@@ -62,6 +62,11 @@ const handleResponse = async (response, method) => {
         });
       }
     }  
+    if(obj.palette)
+    {
+      createPalette(obj.palette);
+    
+    }
   }
 };
 /**
@@ -69,12 +74,12 @@ const handleResponse = async (response, method) => {
  */
 const sendFetch = async () => {
   const method = document.querySelector("#methodSelect").value;
-  const action = document.querySelector("#urlField").value;
-  const response = await fetch(action, {
+  const paletteName = document.querySelector("#nameSearchBar").value;
+  const response = await fetch(`/getPalettes?name=${paletteName}`, {
     method,
     headers: {
       'Accept': 'application/json'
-    }
+    },
   });
   handleResponse(response, method);
 };
