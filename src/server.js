@@ -104,10 +104,11 @@ const handleDelete = (request, response, parsedUrl) => {
  * @param {*} parsedUrl = the requested url to check for.
  * @param {*} params = the query parameters associated with the requested url.
  */
-const handleHead = (request, response, parsedUrl, params) => {
+const handleHead = (request, response, parsedUrl) => {
   switch (parsedUrl.pathname) {
     case '/getPalettes':
       jsonHandler.respondJSONMeta(request, response, 200);
+      break;
     default:
       jsonHandler.notFoundMeta(request, response);
       break;
