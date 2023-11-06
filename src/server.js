@@ -107,16 +107,7 @@ const handleDelete = (request, response, parsedUrl) => {
 const handleHead = (request, response, parsedUrl, params) => {
   switch (parsedUrl.pathname) {
     case '/getPalettes':
-      if (params.loggedIn === 'yes') {
-        jsonHandler.respondJSONMeta(request, response, 200);
-        break;
-      } else {
-        jsonHandler.respondJSONMeta(request, response, 401);
-        break;
-      }
-    case '/getPalette':
-      jsonHandler.respondJSONMeta(request, response, 400);
-      break;
+      jsonHandler.respondJSONMeta(request, response, 200);
     default:
       jsonHandler.notFoundMeta(request, response);
       break;
