@@ -1,5 +1,5 @@
 /*
-Author: Elliot Gong
+Author: Elliot Gong hello there
 Purpose: Create functions for client requests and handling server responses.
 Date: 10/14/2023
 */
